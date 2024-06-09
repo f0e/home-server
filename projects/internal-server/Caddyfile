@@ -1,0 +1,97 @@
+
+{
+	# admin 0.0.0.0:2019
+
+	### for testing
+	# acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+
+	email {$SSL_EMAIL}
+}
+
+(auth) {
+	forward_auth authelia:9091 {
+		uri /api/authz/forward-auth
+		# uri /api/authz/forward-auth?authelia_url=https://auth.{$CUSTOM_DOMAIN}
+		# uri /api/verify?rd=https://auth.{$CUSTOM_DOMAIN}
+
+		copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
+	}
+}
+
+{$CUSTOM_DOMAIN}, *.{$CUSTOM_DOMAIN} {
+	tls {
+		dns cloudflare {$CF_API_TOKEN}
+	resolvers 1.1.1.1 # think this is required? whatever, it's working now so i'll just leave it
+		propagation_timeout 10m # important, doesn't update quick enough by default (for whatever reason..)
+	}
+
+	log {
+		output file /data/access-internal.log
+	}
+
+	# only allow local access (redundant, but just in case)
+	@denied not remote_ip private_ranges
+	abort @denied
+
+	# Authelia Portal.
+	@authelia host auth.{$CUSTOM_DOMAIN}
+	handle @authelia {
+		reverse_proxy authelia:9091
+	}
+
+	@homepage host {$CUSTOM_DOMAIN}
+	handle @homepage {
+		import auth
+
+		reverse_proxy homepage:3000
+
+		encode gzip
+	}
+
+	@radarr host radarr.{$CUSTOM_DOMAIN}
+	handle @radarr {
+		reverse_proxy radarr:7878
+
+		encode gzip
+	}
+
+	@prowlarr host prowlarr.{$CUSTOM_DOMAIN}
+	handle @prowlarr {
+		reverse_proxy prowlarr:9696
+
+		encode gzip
+	}
+
+	@sonarr host sonarr.{$CUSTOM_DOMAIN}
+	handle @sonarr {
+		reverse_proxy sonarr:8989
+
+		encode gzip
+	}
+
+	@share host share.{$CUSTOM_DOMAIN}
+	handle @share {
+		reverse_proxy pairdrop:6824
+
+		encode gzip
+	}
+
+	@code host code.{$CUSTOM_DOMAIN}
+	handle @code {
+		reverse_proxy code-server:8443
+
+		encode gzip
+	}
+
+	@speedtest host speedtest.{$CUSTOM_DOMAIN}
+	handle @speedtest {
+		reverse_proxy openspeedtest:3000
+
+		encode gzip
+	}
+
+	# Fallback for otherwise unhandled domains
+	handle {
+		abort
+	}
+}

@@ -1,0 +1,24 @@
+services:
+  caddy:
+    image: ghcr.io/f0e/caddy-custom
+    container_name: caddy-internal
+    env_file:
+      - caddy.env
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DATA_LOCATION}:/data
+      - ${CONFIG_LOCATION}:/config
+      - ${CADDYFILE_LOCATION}:/etc/caddy/Caddyfile
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - local-services
+    restart: unless-stopped
+
+networks:
+  default: # default network for every container
+    name: internal-server # since the key has to be default this is the actual name
+    driver: bridge
+  local-services:
+    external: true
