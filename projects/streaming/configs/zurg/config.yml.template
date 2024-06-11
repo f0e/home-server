@@ -1,3 +1,6 @@
+# f0e streaming server template
+# docs @ https://github.com/debridmediamanager/zurg-testing
+
 zurg: v1
 token: [real-debrid token]
 # host: "[::]"
