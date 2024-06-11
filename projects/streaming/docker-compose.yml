@@ -72,6 +72,8 @@ services:
       - ${CONFIG_LOCATION}/blackhole/west.env
     depends_on:
       - rclone
+    networks:
+      - local-services
     restart: unless-stopped
 
   # media download managers
@@ -93,6 +95,7 @@ services:
       - /mnt/remote/realdebrid:/mnt/remote/realdebrid
     depends_on:
       - rclone
+      - blackhole
 
   sonarr:
     image: ghcr.io/hotio/sonarr:release
@@ -112,6 +115,7 @@ services:
       - /mnt/remote/realdebrid:/mnt/remote/realdebrid
     depends_on:
       - rclone
+      - blackhole
   
   # indexer manager
   prowlarr:
