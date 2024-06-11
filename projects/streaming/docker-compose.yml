@@ -184,6 +184,15 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
+    
+  plexautolanguages:
+    image: remirigal/plex-auto-languages:latest
+    container_name: plex-auto-languages-streaming
+    env_file:
+      - plexautolanguages.env
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_LOCATION}/plexautolanguages:/config
 
   # todo
   # plex-meta-manager:
