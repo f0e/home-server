@@ -143,6 +143,8 @@ services:
   recyclarr:
     image: ghcr.io/recyclarr/recyclarr
     container_name: recyclarr-streaming
+    env_file:
+      - recyclarr.env
     environment:
       - CRON_SCHEDULE=@daily
       - RECYCLARR_CREATE_CONFIG=true
