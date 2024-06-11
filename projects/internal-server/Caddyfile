@@ -42,11 +42,12 @@
 	@denied not remote_ip private_ranges
 	abort @denied
 
+	encode gzip
+
 	# auth
 	@auth host auth.{$CUSTOM_DOMAIN}
 	handle @auth {
 		reverse_proxy authentik-server:9000
-		encode gzip
 	}
 
 	# public
@@ -54,7 +55,6 @@
 	handle @homepage {
 		import authentik
 		reverse_proxy homepage:3000
-		encode gzip
 	}
 
 	# todo: seems to be broken when forwarding Authorization header
@@ -63,20 +63,17 @@
 	# handle @share {
 	# 	import authentik
 	# 	reverse_proxy pairdrop:6824
-	# 	encode gzip
 	# }
 
 	@speedtest host speedtest.{$CUSTOM_DOMAIN}
 	handle @speedtest {
 		import authentik
 		reverse_proxy openspeedtest:3000
-		encode gzip
 	}
 
 	@immich host immich.{$CUSTOM_DOMAIN}
 	handle @immich {
 		reverse_proxy immich_server:3001
-		encode gzip
 	}
 
 	# dev
@@ -84,7 +81,6 @@
 	handle @code {
 		import authentik
 		reverse_proxy code-server:8443
-		encode gzip
 	}
 
 	# arrs
@@ -92,21 +88,18 @@
 	handle @radarr {
 		import authentik
 		reverse_proxy radarr:7878
-		encode gzip
 	}
 
 	@prowlarr host prowlarr.{$CUSTOM_DOMAIN}
 	handle @prowlarr {
 		import authentik
 		reverse_proxy prowlarr:9696
-		encode gzip
 	}
 
 	@sonarr host sonarr.{$CUSTOM_DOMAIN}
 	handle @sonarr {
 		import authentik
 		reverse_proxy sonarr:8989
-		encode gzip
 	}
 
 	# Fallback for otherwise unhandled domains
