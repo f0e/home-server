@@ -91,7 +91,6 @@
 	@radarr host radarr.{$CUSTOM_DOMAIN}
 	handle @radarr {
 		import authentik
-		import lunasea
 		reverse_proxy radarr:7878
 		encode gzip
 	}
