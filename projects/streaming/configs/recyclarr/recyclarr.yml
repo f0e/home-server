@@ -18,7 +18,7 @@
 sonarr:
   sonarr-main:
     # Set the URL/API Key to your actual instance
-    base_url: !env_var SONARR_BASE__URL
+    base_url: !env_var SONARR_BASE_URL
     api_key: !env_var SONARR_API_KEY
 
     # Quality definitions from the guide to sync to Sonarr. Choices: series, anime
@@ -159,7 +159,7 @@ sonarr:
 # Configuration specific to Radarr.
 radarr:
   radarr-main:
-    base_url: !env_var RADARR_BASE__URL
+    base_url: !env_var RADARR_BASE_URL
     api_key: !env_var RADARR_API_KEY
 
     # Which quality definition in the guide to sync to Radarr. Only choice right now is 'movie'
