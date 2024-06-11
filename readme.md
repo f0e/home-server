@@ -16,6 +16,7 @@ From there, the arrs can use these symlinks like normal files and continue like 
 Pros:
 
 - Infinite storage
+- Don't need to wait for content to download (only wait is media processing times, a 48gb movie took 2m30s to appear in Plex after adding it in Radarr with my setup)
 
 Cons:
 
