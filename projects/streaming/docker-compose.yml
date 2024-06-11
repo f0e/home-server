@@ -66,7 +66,7 @@ services:
     user: 1000:1000
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${MEDIA_LOCATION}:/server/data
+      - ${MEDIA_LOCATION}/downloading/blackhole:/server/data
       - /mnt/remote/realdebrid:/mnt/remote/realdebrid
     env_file:
       - ${CONFIG_LOCATION}/blackhole/west.env
