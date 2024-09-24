@@ -1,0 +1,34 @@
+services:
+  multi-scrobbler:
+    container_name: multi-scrobbler
+    image: foxxmd/multi-scrobbler
+    environment:
+      - BASE_URL=${SCROBBLER_BASE_URL}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_LOCATION}/multi-scrobbler:/config
+    ports:
+      - :9078
+    networks:
+      - local-services
+    restart: unless-stopped
+
+  maloja:
+    container_name: maloja
+    image: krateng/maloja
+    environment:
+      - MALOJA_DATA_DIRECTORY=/data
+      - MALOJA_SKIP_SETUP=true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_LOCATION}/maloja/config:/etc/maloja
+      - ${CONFIG_LOCATION}/maloja/data:/data
+    ports:
+      - :42010
+    networks:
+      - local-services
+    restart: unless-stopped
+
+networks:
+  local-services:
+    external: true

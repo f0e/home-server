@@ -18,7 +18,18 @@
 │       ├── movies
 │       └── tv
 └── transcodes
-    └── plex-streaming
+    └── streaming-plex
+```
+
+### setup
+
+rclone is not included in the docker-compose anymore because I'm running it on bare metal on startup:
+```
+rclone mount zurg: /mnt/cache/remote/zurg --allow-other --allow-non-empty \
+ --cache-dir=/mnt/user/media-local/rclone \
+ --dir-cache-time 5s --buffer-size 32M \
+ --async-read=true --no-check-certificate --no-traverse --ignore-existing \
+ --daemon
 ```
 
 ### example .env

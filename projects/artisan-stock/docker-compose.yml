@@ -1,0 +1,10 @@
+services:
+  artisan-stock-checker:
+    container_name: artisan-stock-checker
+    image: ghcr.io/f0e/artisan-stock-checker
+    env_file:
+      - .env
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_LOCATION}/artisan-stock-checker:/data
+    restart: unless-stopped

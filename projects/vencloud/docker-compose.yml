@@ -1,0 +1,38 @@
+services:
+  vencloud_redis:
+    container_name: vencloud_redis
+    image: redis:alpine
+    restart: always
+    volumes:
+      - ./redis-data:/data
+    environment:
+      REDIS_ARGS: --save 300 1 60 10
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  vencloud:
+    container_name: vencloud
+    image: ghcr.io/vencord/vencloud:latest
+    env_file:
+      - .env
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 8485:8080
+    networks:
+      - default
+      - local-services
+    restart: unless-stopped
+    depends_on:
+      vencloud_redis:
+        condition: service_healthy
+
+networks:
+  default: # default network for every container
+    name: vencloud-network-default # since the key has to be default this is the actual name
+    driver: bridge
+  local-services:
+    external: true

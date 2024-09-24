@@ -1,0 +1,3 @@
+[submodule "projects/streaming/custom/prowlarr-indexers"]
+	path = projects/streaming/custom/prowlarr-indexers
+	url = https://github.com/dreulavelle/Prowlarr-Indexers

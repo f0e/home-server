@@ -8,22 +8,23 @@
 	email {$SSL_EMAIL}
 }
 
-(authentik) {
-	# always forward outpost path to actual outpost
-	reverse_proxy /outpost.goauthentik.io/* authentik-server:9000
+## It is important to read the following document before enabling this section:
+## https://www.authelia.com/integration/proxies/caddy/#trusted-proxies
+(trusted_proxy_list) {
+	## Uncomment & adjust the following line to configure specific ranges which should be considered as trustworthy.
+	# trusted_proxies 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 fc00::/7
+}
 
-	# forward authentication to outpost
-	forward_auth authentik-server:9000 {
-		uri /outpost.goauthentik.io/auth/caddy
+(authelia) {
+	forward_auth authelia:9091 {
+		uri /api/authz/forward-auth
+		## The following commented line is for configuring the Authelia URL in the proxy. We strongly suggest
+		## this is configured in the Session Cookies section of the Authelia configuration.
+		# uri /api/authz/forward-auth?authelia_url=https://auth.example.com/
+		copy_headers Remote-User Remote-Groups Remote-Email Remote-Name
 
-		# capitalization of the headers is important, otherwise they will be empty
-		copy_headers X-Authentik-Username X-Authentik-Groups X-Authentik-Email X-Authentik-Name X-Authentik-Uid X-Authentik-Jwt X-Authentik-Meta-Jwks X-Authentik-Meta-Outpost X-Authentik-Meta-Provider X-Authentik-Meta-App X-Authentik-Meta-Version
-
-		# basic auth fix
-		copy_headers Authorization
-
-		# optional, in this config trust all private ranges, should probably be set to the outposts IP
-		trusted_proxies private_ranges
+		## This import needs to be included if you're relying on a trusted proxies configuration.
+		import trusted_proxy_list
 	}
 }
 
@@ -41,66 +42,148 @@
 	# only allow local access (redundant, but just in case)
 	@denied not remote_ip private_ranges
 	abort @denied
-
-	encode gzip
+	
+	encode zstd gzip
 
 	# auth
 	@auth host auth.{$CUSTOM_DOMAIN}
 	handle @auth {
-		reverse_proxy authentik-server:9000
+		reverse_proxy authelia:9091 {
+			import trusted_proxy_list
+		}
 	}
 
 	# public
 	@homepage host {$CUSTOM_DOMAIN}
 	handle @homepage {
-		import authentik
-		reverse_proxy homepage:3000
+		# import authelia
+		# TODO: show index.html when not logged in, auth.html when logged in
+		
+		root * /homepage
+		file_server {
+			index auth.html
+		}
 	}
-
-	# todo: seems to be broken when forwarding Authorization header
-	# https://github.com/goauthentik/authentik/issues/6519#issuecomment-1701861776
-	# @share host share.{$CUSTOM_DOMAIN}
-	# handle @share {
-	# 	import authentik
-	# 	reverse_proxy pairdrop:6824
-	# }
 
 	@speedtest host speedtest.{$CUSTOM_DOMAIN}
 	handle @speedtest {
-		import authentik
 		reverse_proxy openspeedtest:3000
 	}
 
+	# public (under auth)
+	@paperless host paperless.{$CUSTOM_DOMAIN}
+	handle @paperless {
+		import authelia
+		reverse_proxy paperless-ngx:8000
+	}
+	
+	@owntracks host owntracks.{$CUSTOM_DOMAIN}
+	handle @owntracks {
+		import authelia
+		reverse_proxy owntracks-frontend:80
+	}
+
+	# public (has their own auth) TODO: oauth?
 	@immich host immich.{$CUSTOM_DOMAIN}
 	handle @immich {
-		reverse_proxy immich_server:3001
+		reverse_proxy immich-server:3001
+	}
+
+	@requests host requests.{$CUSTOM_DOMAIN}
+	handle @requests {
+		reverse_proxy streaming-overseerr:5055
+	}
+
+	@home host home.{$CUSTOM_DOMAIN}
+	handle @home {
+		reverse_proxy 192.168.4.67:8123
+	}
+
+	# personal
+	@n8n host n8n.{$CUSTOM_DOMAIN}
+	handle @n8n {
+		import authelia
+		reverse_proxy n8n:5678
+	}
+
+	@scrobbler host scrobbler.{$CUSTOM_DOMAIN}
+	handle @scrobbler {
+		import authelia
+		reverse_proxy multi-scrobbler:9078
+	}
+
+	@maloja host maloja.{$CUSTOM_DOMAIN}
+	handle @maloja {
+		import authelia
+		reverse_proxy maloja:42010
+	}
+
+	@git host git.{$CUSTOM_DOMAIN}
+	handle @git {
+		import authelia
+		reverse_proxy forgejo:3000
+	}
+
+	@tools host tools.{$CUSTOM_DOMAIN}
+	handle @tools {
+		import authelia
+		reverse_proxy it-tools:80
+	}
+
+	@vencloud host vencloud.{$CUSTOM_DOMAIN}
+	handle @vencloud {
+		reverse_proxy vencloud:8080
 	}
 
 	# dev
-	@code host code.{$CUSTOM_DOMAIN}
-	handle @code {
-		import authentik
-		reverse_proxy code-server:8443
+	# @code host code.{$CUSTOM_DOMAIN}
+	# handle @code {
+	# 	import authelia
+	# 	reverse_proxy code-server:8443
+	# }
+
+	@qdirstat host qdirstat.{$CUSTOM_DOMAIN}
+	handle @qdirstat {
+		import authelia
+		reverse_proxy qdirstat:5800
+	}
+
+	@dozzle host dozzle.{$CUSTOM_DOMAIN}
+	handle @dozzle {
+		import authelia
+		reverse_proxy dozzle:8080
 	}
 
 	# arrs
-	@radarr host radarr.{$CUSTOM_DOMAIN}
-	handle @radarr {
-		import authentik
-		reverse_proxy radarr:7878
-	}
-
 	@prowlarr host prowlarr.{$CUSTOM_DOMAIN}
 	handle @prowlarr {
-		import authentik
-		reverse_proxy prowlarr:9696
+		import authelia
+		reverse_proxy streaming-prowlarr:9696
+	}
+
+	@radarr host radarr.{$CUSTOM_DOMAIN}
+	handle @radarr {
+		import authelia
+		reverse_proxy streaming-radarr:7878
 	}
 
 	@sonarr host sonarr.{$CUSTOM_DOMAIN}
 	handle @sonarr {
-		import authentik
-		reverse_proxy sonarr:8989
+		import authelia
+		reverse_proxy streaming-sonarr:8989
 	}
+
+	@bazarr host bazarr.{$CUSTOM_DOMAIN}
+	handle @bazarr {
+		import authelia
+		reverse_proxy streaming-bazarr:6767
+	}
+
+	# @rclone host rclone.{$CUSTOM_DOMAIN}
+	# handle @rclone {
+	# 	import authelia
+	# 	reverse_proxy streaming-rclone:19998
+	# }
 
 	# Fallback for otherwise unhandled domains
 	handle {

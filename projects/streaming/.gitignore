@@ -1,0 +1,16 @@
+# things where configs don't matter or are gui-controlled
+configs/kitana
+configs/plex
+configs/jellyfin
+configs/bazarr
+configs/radarr
+configs/sonarr
+configs/prowlarr
+configs/elasticsearch
+configs/comet
+configs/jackett
+configs/zurg
+configs/overseerr
+
+# i have configged this but barely, people can figure it out
+configs/daps

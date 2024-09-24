@@ -6,119 +6,56 @@ services:
       - caddy.env
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DATA_LOCATION}:/data
-      - ${CONFIG_LOCATION}:/config
+      - ${DATA_LOCATION}/caddy/data:/data
+      - ${HOMEPAGE_LOCATION}:/homepage
+      - ${CONFIG_LOCATION}/caddy/config:/config
       - ${CADDYFILE_LOCATION}:/etc/caddy/Caddyfile
     ports:
       - 80:80
       - 443:443
     networks:
-      - local-services
+      - local-services # todo: i don't like that every other service has to run on the br0 network, but i can't figure out how to connect to them otherwise. if i create a separate br0 network just for caddy then if i include the other bridge network here it'll try to map ports still
     restart: unless-stopped
 
-  # https://goauthentik.io/docker-compose.yml
-  postgresql:
-    container_name: authentik-postgres
-    image: docker.io/library/postgres:16-alpine
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
-      start_period: 20s
-      interval: 30s
-      retries: 5
-      timeout: 5s
-    volumes:
-      - database:/var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: ${PG_PASS:?database password required}
-      POSTGRES_USER: ${PG_USER:-authentik}
-      POSTGRES_DB: ${PG_DB:-authentik}
-    networks:
-      - local-services
-    env_file:
-      - .env
-
-  redis:
-    container_name: authentik-redis
+  authelia-redis:
+    container_name: authelia-redis
     image: docker.io/library/redis:alpine
-    command: --save 60 1 --loglevel warning
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
-      start_period: 20s
-      interval: 30s
-      retries: 5
-      timeout: 3s
+    command: >
+      --requirepass ${REDIS_PASS}
+    volumes:
+      - ${CONFIG_LOCATION}/redis:/data
     networks:
       - local-services
-    volumes:
-      - redis:/data
+    restart: unless-stopped
 
-  server:
-    container_name: authentik-server
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.4.2}
-    restart: unless-stopped
-    command: server
-    environment:
-      AUTHENTIK_REDIS__HOST: redis
-      AUTHENTIK_POSTGRESQL__HOST: postgresql
-      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
-      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
-      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
+  authelia-postgres:
+    container_name: authelia-postgres
+    image: docker.io/library/postgres:16-alpine
     volumes:
-      - ./media:/media
-      - ./custom-templates:/templates
-    env_file:
-      - .env
-    ports:
-      - :9000
-      - :9443
+      - ${CONFIG_LOCATION}/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${PG_PASS}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_DB: ${PG_DB}
     networks:
       - local-services
-    depends_on:
-      - postgresql
-      - redis
-      
-  worker:
-    container_name: authentik-worker
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.4.2}
     restart: unless-stopped
-    command: worker
-    environment:
-      AUTHENTIK_REDIS__HOST: redis
-      AUTHENTIK_POSTGRESQL__HOST: postgresql
-      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
-      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
-      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
-    # `user: root` and the docker socket volume are optional.
-    # See more for the docker socket integration here:
-    # https://goauthentik.io/docs/outposts/integrations/docker
-    # Removing `user: root` also prevents the worker from fixing the permissions
-    # on the mounted folders, so when removing this make sure the folders have the correct UID/GID
-    # (1000:1000 by default)
-    user: root
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./media:/media
-      - ./certs:/certs
-      - ./custom-templates:/templates
-    env_file:
-      - .env
-    networks:
-      - local-services
-    depends_on:
-      - postgresql
-      - redis
 
-volumes:
-  database:
-    driver: local
-  redis:
-    driver: local
+  authelia:
+    container_name: authelia
+    image: docker.io/authelia/authelia:latest
+    networks:
+      - local-services
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_LOCATION}/authelia:/config
+    expose:
+      - 9091
+    restart: unless-stopped
+    depends_on:
+      - authelia-redis
+      - authelia-postgres
 
 networks:
-  default: # default network for every container
-    name: internal-server # since the key has to be default this is the actual name
-    driver: bridge
   local-services:
     external: true

@@ -1,42 +1,119 @@
 services:
   # real debrid webdav
-  zurg:
-    image: ghcr.io/debridmediamanager/zurg-testing:v0.9.3-hotfix.11
-    container_name: zurg-streaming
-    restart: unless-stopped
+  streaming-zurg:
+    container_name: streaming-zurg
+    image: ghcr.io/debridmediamanager/zurg-testing:latest
     healthcheck:
-      test: curl -f localhost:9999/dav/version.txt || exit 1
+        # test: curl -f localhost:9999/dav/version.txt || exit 1
+        test: ["CMD-SHELL", "curl -f localhost:9999/dav/version.txt && [ -d /mnt/remote/realdebrid ] || exit 1"]
+        interval: 5s
+        timeout: 10s
+        retries: 1
+        start_period: 1s
     ports:
-      - :9999
+      - 9999:9999
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_LOCATION}/zurg/config.yml:/app/config.yml
       - zurgdata:/app/data
-  
-  # mount zurg webdav
-  rclone:
-    image: rclone/rclone:latest
-    container_name: rclone-streaming
+      - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid
     restart: unless-stopped
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ${CONFIG_LOCATION}/zurg/rclone.conf:/config/rclone/rclone.conf
-      - /mnt/remote/realdebrid:/data:rshared
-    cap_add:
-      - SYS_ADMIN
-    security_opt:
-      - apparmor:unconfined
-    devices:
-      - /dev/fuse:/dev/fuse:rwm
-    depends_on:
-      zurg:
-        condition: service_healthy
-        restart: true
-    command: 'mount zurg: /data --allow-non-empty --allow-other --uid=1000 --gid=1000 --dir-cache-time 10s'
+  
+#   # mount zurg webdav
+#   streaming-rclone:
+#     container_name: streaming-rclone
+#     image: rclone/rclone:latest
+#     environment:
+#       - PUID=1000
+#       - PGID=1000
+#     command: >
+#       mount zurg: /data 
+#       --cache-dir=/cache 
+#       --uid=1000 --gid=1000
+#       --umask=002
+#       --allow-other --allow-non-empty 
+#       --buffer-size=32M 
+#       --dir-cache-time=5s 
+#       --vfs-cache-min-free-space=off 
+#       --vfs-cache-max-age=24h 
+#       --vfs-cache-max-size=150G 
+#       --vfs-cache-mode=full
+#       --vfs-read-chunk-size-limit=64M 
+#       --vfs-read-chunk-size=1M 
+#       --async-read=true
+#       --bwlimit=512M
+#       --rc 
+#       --rc-addr=0.0.0.0:19998 
+#       --rc-enable-metrics 
+#       --rc-web-gui 
+#       --rc-no-auth 
+#       --rc-web-gui-no-open-browser 
+#       --no-check-certificate 
+#       --no-traverse 
+#       --ignore-existing 
+#       -v
+# #      --use-mmap 
+# #      --timeout=10m 
+
+#     # command: 'mount zurg: /data --vfs-read-chunk-size 1M --vfs-cache-mode=full --vfs-read-chunk-size-limit 32M --vfs-cache-max-age=5h --vfs-cache-max-size=2G --dir-cache-time=10s'
+#     # command: >
+#     #   mount zurg: /data
+#     #   --allow-other --allow-non-empty 
+#     #   --bind=0.0.0.0 
+#     #   --cache-dir=/cache 
+#     #   --buffer-size=32M 
+#     #   --dir-cache-time=5s
+#     #   --uid=1000 --gid=1000 
+#     #   --timeout=10m 
+#     #   --umask=002 
+#     #   --use-mmap 
+#     #   --vfs-cache-min-free-space=off 
+#     #   --vfs-cache-max-age=1024h 
+#     #   --vfs-cache-max-size=50G 
+#     #   --vfs-cache-mode=full
+#     #   --vfs-read-chunk-size-limit=64M 
+#     #   --vfs-read-chunk-size=1M 
+#     #   --async-read=true
+#     #   --rc 
+#     #   --rc-addr=0.0.0.0:19998 
+#     #   --rc-enable-metrics 
+#     #   --rc-no-auth 
+#     #   --rc-web-gui-no-open-browser 
+#     #   --no-check-certificate 
+#     #   --no-traverse 
+#     #   --ignore-existing 
+#     #   -v
+#     volumes:
+#       - /etc/localtime:/etc/localtime:ro
+#       - ${CONFIG_LOCATION}/zurg/rclone.conf:/config/rclone/rclone.conf
+#       - ${TRANSCODES_LOCATION}/rclone:/cache
+#       - ${ZURG_DATA_LOCATION}:/data:rshared
+#     cap_add:
+#       - SYS_ADMIN
+#     security_opt:
+#       - apparmor:unconfined
+#     devices:
+#       - /dev/fuse
+#     ports:
+#       - 19998:19998
+#     networks:
+#       - default
+#       - local-services
+#     healthcheck:
+#         test: "[ -d /data/__all__ ]"
+#         timeout: 10s
+#         interval: 10s
+#         retries: 20
+#         start_period: 10s
+#     depends_on:
+#       streaming-zurg:
+#         condition: service_healthy
+#         restart: true
+#     restart: unless-stopped
 
   # media server
-  plex:
-    container_name: plex-streaming
+  streaming-plex:
+    container_name: streaming-plex
     image: ghcr.io/hotio/plex
     devices:
       - /dev/dri:/dev/dri
@@ -44,105 +121,161 @@ services:
       - PLEX_UID=1000
       - PLEX_GID=1000
       - UMASK=002
+      - PLEX_ADVERTISE_URL=http://192.168.4.97:32400
     ports:
-      - 32401:32400 # have to expose plex for it to work (i think)
-    restart: unless-stopped
+      - 32400:32400
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /dev/dri:/dev/dri
       - ${CONFIG_LOCATION}/plex:/config
-      - ${MEDIA_LOCATION}:/server/data
-      - ${TRANSCODES_LOCATION}/plex-streaming:/transcode
-      - /mnt/remote/realdebrid:/mnt/remote/realdebrid
+      - ${MEDIA_STREAMING_LOCATION}/media:/server/data/streaming
+      - ${MEDIA_LOCAL_LOCATION}/media:/server/data/local
+      - ${TRANSCODES_LOCATION}/streaming-plex:/transcode
+      - ${DEBUG_LOCATION}/PlexDBRepair:/PlexDBRepair
+      - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid
+    networks:
+      - default
+      - local-services
     depends_on:
-      - rclone
+      streaming-zurg:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # streaming-jellyfin:
+  #   container_name: streaming-jellyfin
+  #   image: ghcr.io/hotio/jellyfin
+  #   devices:
+  #     - /dev/dri:/dev/dri
+  #   ports:
+  #     - 8096:8096
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - UMASK=002
+  #   volumes:
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - ${CONFIG_LOCATION}/jellyfin:/config
+  #     - ${MEDIA_STREAMING_LOCATION}/media:/server/data/streaming
+  #     - ${MEDIA_LOCAL_LOCATION}/media:/server/data/local
+  #     - ${TRANSCODES_LOCATION}/streaming-plex:/transcode
+  #     - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid
+  #   networks:
+  #     - default
+  #     - local-services
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 6G
+  #   restart: unless-stopped
+  
+  # streaming-tinymediamanager:
+  #   container_name: streaming-tinymediamanager
+  #   image: tinymediamanager/tinymediamanager:latest
+  #   environment:
+  #     - USER_ID=1000
+  #     - GROUP_ID=100
+  #     - ALLOW_DIRECT_VNC=true
+  #     - LC_ALL=en_US.UTF-8 # force UTF8
+  #     - LANG=en_US.UTF-8   # force UTF8
+  #     - PASSWORD=6CKauNVbEg@HVWvpC_gg
+  #   volumes:
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - ${CONFIG_LOCATION}/tinymediamanager:/config
+  #     - ${MEDIA_STREAMING_LOCATION}/media:/server/data/streaming
+  #     - ${MEDIA_LOCAL_LOCATION}/media:/server/data/local
+  #   ports:
+  #     - 5900:5900 # VNC port
+  #     - 4000:4000 # Webinterface
+  #   networks:
+  #     - default
+  #     - local-services
+  #   restart: unless-stopped
 
   # downloader - adds torrent files to real-debrid
-  blackhole:
-    build:
-      context: https://github.com/westsurname/scripts.git
-      dockerfile: Dockerfile.blackhole
-    container_name: blackhole-streaming
+  streaming-blackhole:
+    container_name: streaming-blackhole
+    image: ghcr.io/westsurname/scripts/blackhole:latest
     user: 1000:1000
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${MEDIA_LOCATION}/downloading/blackhole:/server/data
-      - /mnt/remote/realdebrid:/mnt/remote/realdebrid
+      - ${MEDIA_STREAMING_LOCATION}/downloading/blackhole:/server/data/streaming/downloading/blackhole
+      - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid
     env_file:
-      - ${CONFIG_LOCATION}/blackhole/west.env
-    depends_on:
-      - rclone
+      - ${CONFIG_LOCATION}/west/west.env
     networks:
+      - default
       - local-services
+    depends_on:
+      streaming-zurg:
+        condition: service_healthy
     restart: unless-stopped
 
   # media download managers
-  radarr:
+  streaming-radarr:
+    container_name: streaming-radarr
     image: ghcr.io/hotio/radarr:release
-    container_name: radarr-streaming
     environment:
       - PUID=1000
       - PGID=1000
     ports:
       - :7878
-    networks:
-      - local-services
-    restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_LOCATION}/radarr:/config
-      - ${MEDIA_LOCATION}:/server/data
-      - /mnt/remote/realdebrid:/mnt/remote/realdebrid
+      - ${MEDIA_STREAMING_LOCATION}:/server/data/streaming
+      - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid
+    networks:
+      - default
+      - local-services
     depends_on:
-      - rclone
-      - blackhole
+      - streaming-blackhole
+    restart: unless-stopped
 
-  sonarr:
+  streaming-sonarr:
+    container_name: streaming-sonarr
     image: ghcr.io/hotio/sonarr:release
-    container_name: sonarr-streaming
     environment:
       - PUID=1000
       - PGID=1000
     ports:
       - :8989
-    networks:
-      - local-services
-    restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_LOCATION}/sonarr:/config
-      - ${MEDIA_LOCATION}:/server/data
-      - /mnt/remote/realdebrid:/mnt/remote/realdebrid
+      - ${MEDIA_STREAMING_LOCATION}:/server/data/streaming
+      - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid
+    networks:
+      - default
+      - local-services
     depends_on:
-      - rclone
-      - blackhole
+      - streaming-blackhole
+    restart: unless-stopped
   
   # indexer manager
-  prowlarr:
+  streaming-prowlarr:
+    container_name: streaming-prowlarr
     image: ghcr.io/hotio/prowlarr:release
-    container_name: prowlarr-streaming
     environment:
       - PUID=1000
       - PGID=1000
     ports:
       - :9696
     networks:
+      - default
       - local-services
-    restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_LOCATION}/prowlarr:/config
-      - ${MEDIA_LOCATION}:/server/data
-      - ${CUSTOM_LOCATION}/Prowlarr-Indexers/Custom:/config/Definitions/Custom
-      - /mnt/remote/realdebrid:/mnt/remote/realdebrid
+      - ${MEDIA_STREAMING_LOCATION}:/server/data/streaming
+      - ${CUSTOM_LOCATION}/prowlarr-indexers/Custom:/config/Definitions/Custom
+      - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid
     depends_on:
-      - rclone
-      - flaresolverr
+      - streaming-flaresolverr
+    restart: unless-stopped
 
   # download manager configurator
-  recyclarr:
+  streaming-recyclarr:
+    container_name: streaming-recyclarr
     image: ghcr.io/recyclarr/recyclarr
-    container_name: recyclarr-streaming
     env_file:
       - recyclarr.env
     environment:
@@ -154,29 +287,32 @@ services:
       - ${CONFIG_LOCATION}/recyclarr:/config
 
   # subtitle downloader
-  bazarr:
+  streaming-bazarr:
+    container_name: streaming-bazarr
     image: ghcr.io/hotio/bazarr
-    container_name: bazarr-streaming
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_LOCATION}/bazarr:/config
-      - ${MEDIA_LOCATION}:/server/data
-      - /mnt/remote/realdebrid:/mnt/remote/realdebrid
+      - ${MEDIA_STREAMING_LOCATION}:/server/data/streaming
+      - ${CUSTOM_LOCATION}/subcleaner:/server/custom/subcleaner
+      - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid # not really needed but whatever
     ports:
       - :6767
     networks:
+      - default
       - local-services
-    restart: unless-stopped
     depends_on:
-      - rclone
+      streaming-zurg:
+        condition: service_healthy
+    restart: unless-stopped
 
   # misc
-  flaresolverr:
+  streaming-flaresolverr:
+    container_name: streaming-flaresolverr
     image: ghcr.io/flaresolverr/flaresolverr:latest
-    container_name: flaresolverr-streaming
     environment:
       - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
     ports:
@@ -185,37 +321,269 @@ services:
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     
-  plexautolanguages:
+  streaming-plexautolanguages:
+    container_name: streaming-plexautolanguages
     image: remirigal/plex-auto-languages:latest
-    container_name: plex-auto-languages-streaming
     env_file:
       - plexautolanguages.env
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_LOCATION}/plexautolanguages:/config
+  
+  streaming-kometa:
+    container_name: streaming-kometa
+    image: kometateam/kometa
+    # environment:
+    #   - KOMETA_RUN=true
+    #   - KOMETA_IGNORE_SCHEDULES=true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_LOCATION}/kometa:/config
+    networks:
+      - default
+      - local-services
+    depends_on:
+      - streaming-plex
+      - streaming-radarr
+      - streaming-sonarr
+    restart: unless-stopped
 
-  # todo
-  # plex-meta-manager:
-  #   image: meisnate12/plex-meta-manager
-  #   container_name: plex-meta-manager-streaming
-  #   environment:
-  #     # - PMM_RUN=true
-  #   restart: unless-stopped
+  # streaming-imagemaid:
+  #   container_name: streaming-imagemaid
+  #   image: kometateam/imagemaid
   #   volumes:
   #     - /etc/localtime:/etc/localtime:ro
-  #     - ${CONFIG_LOCATION}/plex-meta-manager:/config
-  #     - ${MEDIA_LOCATION}:/server/data
-  #     - /mnt/remote/realdebrid:/mnt/remote/realdebrid
+  #     - ${CONFIG_LOCATION}/imagemaid:/config
+  #     - ${CONFIG_LOCATION}/plex:/plex
+  #   networks:
+  #     - default
+  #     - local-services
+  #   restart: unless-stopped
+
+  # streaming-daps:
+  #   container_name: streaming-daps
+  #   image: drazzilb08/daps
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #   volumes:
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - ${CONFIG_LOCATION}/daps:/config
+  #     - ${CONFIG_LOCATION}/kometa/assets:/kometa
+  #     - ${POSTERS_LOCATION}/posters:/posters
+  #     - ${MEDIA_STREAMING_LOCATION}/media:/media
   #   depends_on:
-  #     - rclone
-  #     - plex
+  #     - streaming-plex
+  #     - streaming-radarr
+  #     - streaming-sonarr
+  #   restart: unless-stopped
+
+  # streaming-kitana:
+  #   image: pannal/kitana:latest
+  #   container_name: streaming-kitana
+  #   volumes:
+  #     - ${CONFIG_LOCATION}/kitana:/app/data
+  #   ports:
+  #     - 31337:31337
+  #   links:
+  #     - streaming-plex
+  #   command: -B 0.0.0.0:31337 -P
+  #   restart: unless-stopped
+
+  streaming-zilean:
+    container_name: streaming-zilean
+    image: ipromknight/zilean:latest
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 8181:8181
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - zilean_data:/app/data
+    environment:
+        Zilean__Database__ConnectionString: "Host=streaming-postgres;Port=5432;Database=zilean;Username=postgres;Password=$ZILEAN_POSTGRES_PASSWORD"
+      # Zilean__Dmm__ImportBatched: "true"         Allows enabling batched import - this is for low-end systems.
+      # Zilean__Dmm__MaxFilteredResults: 200       Allows changing the maximum number of filtered results returned by the DMM API. 200 is the default.
+      # Zilean__Dmm__MinimumScoreMatch: 0.85       Allows changing the minimum score match for the DMM API. 0.85 is the default. Values between 0 and 1 are accepted.
+    healthcheck:
+      test: curl --connect-timeout 10 --silent --show-error --fail http://localhost:8181/healthchecks/ping
+      timeout: 60s
+      interval: 30s
+      retries: 10
+    depends_on:
+      streaming-postgres:
+        condition: service_healthy
+        
+  streaming-postgres:
+    image: postgres:16.3-alpine3.20
+    container_name: streaming-postgres
+    restart: unless-stopped
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: $ZILEAN_POSTGRES_PASSWORD
+      POSTGRES_DB: zilean
+    ports:
+      - 5432:5432
+    volumes:
+      - pg_data:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  streaming-pgadmin:
+    image: dpage/pgadmin4
+    container_name: streaming-pgadmin
+    ports:
+      - 6001:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=$PGADMIN_EMAIL
+      - PGADMIN_DEFAULT_PASSWORD=$PGADMIN_PASSWORD
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+    entrypoint: /bin/sh -c "chmod 600 /pgpass; /entrypoint.sh;"
+    user: root
+    configs:
+      - source: pgadmin_servers.json
+        target: /pgadmin4/servers.json
+      - source: pgadmin_pgpass
+        target: /pgpass
+    depends_on:
+      streaming-postgres:
+        condition: service_healthy
+
+  streaming-comet:
+    image: g0ldyy/comet
+    container_name: streaming-comet
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    environment:
+      - ADDON_ID=stremio.comet.fast # for Stremio
+      - ADDON_NAME=Comet # for Stremio
+      - FASTAPI_HOST=0.0.0.0
+      - FASTAPI_PORT=8000
+      - FASTAPI_WORKERS=1 # remove to destroy CPU -> max performances
+      - DATABASE_PATH=/data/comet.db # only change it if you know what it is - folders in path must exist
+      - CACHE_TTL=86400 # cache duration in seconds
+      - DEBRID_PROXY_URL=http://127.0.0.1:1080 # https://github.com/cmj2002/warp-docker to bypass Debrid Services and Torrentio server IP blacklist 
+      - INDEXER_MANAGER_TYPE=jackett # or prowlarr
+      - INDEXER_MANAGER_URL=http://streaming-comet-jackett:9117
+      - INDEXER_MANAGER_API_KEY=$JACKETT_API_KEY
+      - INDEXER_MANAGER_TIMEOUT=60 # maximum time to obtain search results from indexer manager in seconds
+      - INDEXER_MANAGER_INDEXERS=["EZTV", "YTS", "TheRARBG", "BitSearch", "ThePirateBay"]
+      - GET_TORRENT_TIMEOUT=5 # maximum time to obtain the torrent info hash in seconds
+      - ZILEAN_URL=http://streaming-zilean:8181 # for DMM search - https://github.com/iPromKnight/zilean
+      - ZILEAN_TAKE_FIRST=500 # only change it if you know what it is
+      - SCRAPE_TORRENTIO=False # scrape Torrentio
+      - CUSTOM_HEADER_HTML=None # only set it if you know what it is
+      - PROXY_DEBRID_STREAM=False # Proxy Debrid Streams (very useful to use your debrid service on multiple IPs at same time)
+      - PROXY_DEBRID_STREAM_PASSWORD=CHANGE_ME # Secret password to enter on configuration page to prevent people from abusing your debrid stream proxy
+      - TITLE_MATCH_CHECK=True # disable if you only use Jackett / Prowlarr / Torrentio and are sure you're only scraping good titles, for example (keep it True if Zilean is enabled)
+    volumes:
+      - ${CONFIG_LOCATION}/comet:/data
+    networks:
+      - default
+      - local-services
+
+  streaming-comet-jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: streaming-comet-jackett
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_LOCATION}/jackett/config:/config
+      - ${CONFIG_LOCATION}/jackett/downloads:/downloads
+    ports:
+      - 9117:9117
+    restart: unless-stopped
+    networks:
+      - default
+      - local-services
+
+  streaming-overseerr:
+    container_name: streaming-overseerr
+    image: ghcr.io/hotio/overseerr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_LOCATION}/overseerr:/config
+    ports:
+      - :5055
+    networks:
+      - default
+      - local-services
+    restart: unless-stopped
 
 volumes:
   zurgdata:
+  zilean_data:
+  pg_data:
+  # zurg:
+  #   driver: rclone
+  #   driver_opts:
+  #     type: "webdav"
+  #     webdav_url: "http://localhost:9999/dav"
+  #     webdav_vendor: "other"
+  #     webdav_pacer_min_sleep: "0"
+  #     allow_non_empty: "true"
+  #     allow_other: "true"
+  #     uid: "1000"
+  #     gid: "1000"
+  #     umask: "002"
+  #     dir_cache_time: "5s"
+  #     poll_interval: "10s"
+
+  #     cache_dir: "/cache"
+  #     buffer_size: "32M"
+  #     # vfs_cache_min_free_space: "off"
+  #     # vfs_cache_max_age: "24h"
+  #     # vfs_cache_max_size: "150G"
+  #     # vfs_cache_mode: "full"
+  #     # vfs_read_chunk_size: "1M"
+  #     # vfs_read_chunk_size_limit: "64M"
+  #     async_read: "true"
+  #     bwlimit: "512M"
+  #     rc: "true"
+  #     rc_addr: "http://localhost:19998"
+  #     rc_enable_metrics: "true"
+  #     rc_web_gui: "true"
+  #     rc_no_auth: "true"
+  #     rc_web_gui_no_open_browser: "true"
+  #     no_check_certificate: "true"
+  #     no_traverse: "true"
+  #     ignore_existing: "true"
 
 networks:
   default: # default network for every container
-    name: streaming # since the key has to be default this is the actual name
+    name: streaming-network-default # since the key has to be default this is the actual name
     driver: bridge
   local-services:
     external: true
+
+configs:
+  pgadmin_pgpass:
+    content: streaming-postgres:5432:*:postgres:$ZILEAN_POSTGRES_PASSWORD
+  pgadmin_servers.json:
+    content: |
+      {
+        "Servers": {
+        "1": {
+            "Group": "Servers",
+            "Name": "Zilean Database",
+            "Host": "streaming-postgres",
+            "Port": 5432,
+            "MaintenanceDB": "zilean",
+            "Username": "postgres",
+            "PassFile": "/pgpass",
+            "SSLMode": "prefer"
+          }
+        }
+      }
