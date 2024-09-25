@@ -34,10 +34,10 @@ sonarr:
           - name: Bluray-2160p
           - name: Bluray-1080p Remux # changed my mind for <1080p, if there isn't 4k web then the 1080p encode is likely bad (e.g. mr robot amazon s03e01 🤢), so just get the bluray since 1080p isnt that big anyway
           - name: Bluray-1080p
-          - name: Bluray-720p
           # WEB 1080p
           - name: WEBDL-1080p
           - name: WEBRip-1080p
+          - name: Bluray-720p
           # WEB 720p
           - name: WEBDL-720p
           - name: WEBRip-720p
@@ -111,10 +111,10 @@ sonarr:
           - name: WEBRip-2160p
           - name: Bluray-1080p Remux
           - name: Bluray-1080p
-          - name: Bluray-720p
           # WEB 1080p
           - name: WEBDL-1080p
           - name: WEBRip-1080p
+          - name: Bluray-720p
           # WEB 720p
           - name: WEBDL-720p
           - name: WEBRip-720p
