@@ -144,6 +144,8 @@ sonarr:
           - a3d82cbef5039f8d295478d28a887159 # HDR10+
           - 17e889ce13117940092308f48b48b45b # HLG
           - 2a7e3be05d3861d6df7171ec74cad727 # PQ
+          
+          - 3a4127d8aa781b44120d907f2cd62627 # Hybrid
 
           # HDR boost
           - 0dad0a507451acddd754fe6dc3a7f5e7 # HDR10+ Boost
@@ -205,7 +207,9 @@ sonarr:
           - d0c516558625b04b363fa6c5c2c7cfd4 # WEB Scene
         assign_scores_to:
           - name: Best
+          - name: WEB
           - name: Bluray
+          - name: Best (Prioritise Bluray)
 
       # Prefer season packs
       - trash_ids:
@@ -213,7 +217,11 @@ sonarr:
         assign_scores_to:
           - name: Best
             score: 10
+          - name: WEB
+            score: 10
           - name: Bluray
+            score: 10
+          - name: Best (Prioritise Bluray)
             score: 10
 
 radarr:
@@ -426,10 +434,19 @@ radarr:
           - 1b355ff093fd1064b75ea98c616881b1 # VIU
         assign_scores_to:
           - name: Best
+          - name: WEB
+          - name: Bluray
+          - name: Best (Prioritise Bluray)
 
       # Prevent open matte versions (THEY ARENT REAL)
       - trash_ids:
           - 09d9dd29a0fc958f9796e65c2a8864b4
         assign_scores_to:
           - name: Best
+            score: -10000
+          - name: WEB
+            score: -10000
+          - name: Bluray
+            score: -10000
+          - name: Best (Prioritise Bluray)
             score: -10000
