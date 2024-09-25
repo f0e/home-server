@@ -28,16 +28,12 @@ sonarr:
         quality_sort: top
         qualities:
           # WEB 2160p # web > bluray, free good quality encodes:)
-          - name: WEBDL-2160p
+          - name: WEBDL-2160p # webdl>webrip, download > recorded
           - name: WEBRip-2160p
-          - name: Bluray 2160p
-            qualities:
-              - Bluray-2160p Remux
-              - Bluray-2160p
-          - name: Bluray 1080p # changed my mind for <1080p, if there isn't 4k web then the 1080p encode is likely bad (e.g. mr robot amazon s03e01 🤢), so just get the bluray since 1080p isnt that big anyway
-            qualities:
-              - Bluray-1080p Remux
-              - Bluray-1080p
+          - name: Bluray-2160p Remux # remux>bluray, remuxes > reencodes
+          - name: Bluray-2160p
+          - name: Bluray-1080p Remux # changed my mind for <1080p, if there isn't 4k web then the 1080p encode is likely bad (e.g. mr robot amazon s03e01 🤢), so just get the bluray since 1080p isnt that big anyway
+          - name: Bluray-1080p
           - name: Bluray-720p
           # WEB 1080p
           - name: WEBDL-1080p
@@ -91,14 +87,10 @@ sonarr:
         min_format_score: 0
         quality_sort: top
         qualities:
-          - name: Bluray 2160p
-            qualities:
-              - Bluray-2160p Remux
-              - Bluray-2160p
-          - name: Bluray 1080p
-            qualities:
-              - Bluray-1080p Remux
-              - Bluray-1080p
+          - name: Bluray-2160p Remux
+          - name: Bluray-2160p
+          - name: Bluray-1080p Remux
+          - name: Bluray-1080p
           - name: Bluray-720p
           - name: Bluray-480p
 
@@ -112,17 +104,13 @@ sonarr:
         min_format_score: 0
         quality_sort: top
         qualities:
-          - name: Bluray 2160p
-            qualities:
-              - Bluray-2160p Remux
-              - Bluray-2160p
+          - name: Bluray-2160p Remux
+          - name: Bluray-2160p
           # WEB 2160p
           - name: WEBDL-2160p
           - name: WEBRip-2160p
-          - name: Bluray 1080p
-            qualities:
-              - Bluray-1080p Remux
-              - Bluray-1080p
+          - name: Bluray-1080p Remux
+          - name: Bluray-1080p
           - name: Bluray-720p
           # WEB 1080p
           - name: WEBDL-1080p
@@ -256,14 +244,10 @@ radarr:
           # WEB 2160p # web > bluray, free good quality encodes:)
           - name: WEBDL-2160p
           - name: WEBRip-2160p
-          - name: Bluray 2160p
-            qualities:
-              - Remux-2160p
-              - Bluray-2160p
-          - name: Bluray 1080p # changed my mind for <1080p, if there isn't 4k web then the 1080p encode is likely bad (e.g. mr robot amazon s03e01 🤢), so just get the bluray since 1080p isnt that big anyway
-            qualities:
-              - Remux-1080p
-              - Bluray-1080p
+          - name: Remux-2160p
+          - name: Bluray-2160p
+          - name: Remux-1080p # changed my mind for <1080p, if there isn't 4k web then the 1080p encode is likely bad (e.g. mr robot amazon s03e01 🤢), so just get the bluray since 1080p isnt that big anyway
+          - name: Bluray-1080p # changed my mind for <1080p, if there isn't 4k web then the 1080p encode is likely bad (e.g. mr robot amazon s03e01 🤢), so just get the bluray since 1080p isnt that big anyway
           # WEB 1080p
           - name: WEBDL-1080p
           - name: WEBRip-1080p
@@ -305,14 +289,10 @@ radarr:
         min_format_score: 0
         quality_sort: top
         qualities:
-          - name: Bluray 2160p
-            qualities:
-              - Remux-2160p
-              - Bluray-2160p
-          - name: Bluray 1080p
-            qualities:
-              - Remux-1080p
-              - Bluray-1080p
+          - name: Remux-2160p
+          - name: Bluray-2160p
+          - name: Remux-1080p
+          - name: Bluray-1080p
           - name: Bluray-720p
           
       - name: Best (Prioritise Bluray)
@@ -325,17 +305,13 @@ radarr:
         min_format_score: 0
         quality_sort: top
         qualities:
-          - name: Bluray 2160p
-            qualities:
-              - Remux-2160p
-              - Bluray-2160p
+          - name: Remux-2160p
+          - name: Bluray-2160p
           # WEB 2160p
           - name: WEBDL-2160p
           - name: WEBRip-2160p
-          - name: Bluray 1080p
-            qualities:
-              - Remux-1080p
-              - Bluray-1080p
+          - name: Remux-1080p
+          - name: Bluray-1080p
           # WEB 1080p
           - name: WEBDL-1080p
           - name: WEBRip-1080p
