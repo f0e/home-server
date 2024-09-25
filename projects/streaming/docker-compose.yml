@@ -5,7 +5,7 @@ services:
     image: ghcr.io/debridmediamanager/zurg-testing:latest
     healthcheck:
         # test: curl -f localhost:9999/dav/version.txt || exit 1
-        test: ["CMD-SHELL", "curl -f localhost:9999/dav/version.txt && [ -d /mnt/remote/realdebrid ] || exit 1"]
+        test: ["CMD-SHELL", "curl -f localhost:9999/dav/version.txt && [ -d /mnt/cache/remote/zurg ] || exit 1"]
         interval: 5s
         timeout: 10s
         retries: 1
@@ -16,7 +16,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_LOCATION}/zurg/config.yml:/app/config.yml
       - zurgdata:/app/data
-      - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid
+      - ${ZURG_DATA_LOCATION}:/mnt/cache/remote/zurg
     restart: unless-stopped
   
 #   # mount zurg webdav
@@ -131,7 +131,7 @@ services:
       - ${MEDIA_LOCAL_LOCATION}/media:/server/data/local
       - ${TRANSCODES_LOCATION}/streaming-plex:/transcode
       - ${DEBUG_LOCATION}/PlexDBRepair:/PlexDBRepair
-      - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid
+      - ${ZURG_DATA_LOCATION}:/mnt/cache/remote/zurg
     networks:
       - default
       - local-services
@@ -157,7 +157,7 @@ services:
   #     - ${MEDIA_STREAMING_LOCATION}/media:/server/data/streaming
   #     - ${MEDIA_LOCAL_LOCATION}/media:/server/data/local
   #     - ${TRANSCODES_LOCATION}/streaming-plex:/transcode
-  #     - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid
+  #     - ${ZURG_DATA_LOCATION}:/mnt/cache/remote/zurg
   #   networks:
   #     - default
   #     - local-services
@@ -198,7 +198,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${MEDIA_STREAMING_LOCATION}/downloading/blackhole:/server/data/streaming/downloading/blackhole
-      - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid
+      - ${ZURG_DATA_LOCATION}:/mnt/cache/remote/zurg
     env_file:
       - ${CONFIG_LOCATION}/west/west.env
     networks:
@@ -222,7 +222,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_LOCATION}/radarr:/config
       - ${MEDIA_STREAMING_LOCATION}:/server/data/streaming
-      - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid
+      - ${ZURG_DATA_LOCATION}:/mnt/cache/remote/zurg
     networks:
       - default
       - local-services
@@ -242,7 +242,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_LOCATION}/sonarr:/config
       - ${MEDIA_STREAMING_LOCATION}:/server/data/streaming
-      - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid
+      - ${ZURG_DATA_LOCATION}:/mnt/cache/remote/zurg
     networks:
       - default
       - local-services
@@ -267,7 +267,7 @@ services:
       - ${CONFIG_LOCATION}/prowlarr:/config
       - ${MEDIA_STREAMING_LOCATION}:/server/data/streaming
       - ${CUSTOM_LOCATION}/prowlarr-indexers/Custom:/config/Definitions/Custom
-      - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid
+      - ${ZURG_DATA_LOCATION}:/mnt/cache/remote/zurg
     depends_on:
       - streaming-flaresolverr
     restart: unless-stopped
@@ -298,7 +298,7 @@ services:
       - ${CONFIG_LOCATION}/bazarr:/config
       - ${MEDIA_STREAMING_LOCATION}:/server/data/streaming
       - ${CUSTOM_LOCATION}/subcleaner:/server/custom/subcleaner
-      - ${ZURG_DATA_LOCATION}:/mnt/remote/realdebrid # not really needed but whatever
+      - ${ZURG_DATA_LOCATION}:/mnt/cache/remote/zurg # not really needed but whatever
     ports:
       - :6767
     networks:
