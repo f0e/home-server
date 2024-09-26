@@ -1,0 +1,301 @@
+external_templates:
+  - file: /config/templates/collections
+  - file: /config/templates/dynamic_collections
+
+collections:
+  # --------- trending ---------
+    
+  Movies Trending This Week:
+    template: { name: Collection,
+                sort_title: "Movies Trending This Week",
+                level: "++",
+                poster_url: https://theposterdb.com/api/assets/353972 }
+    tmdb_trending_weekly: 30
+    collection_order: custom
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  # --------- critic lists ---------
+
+  # Movies with a perfect RT score, updated monthly
+  "100% on Rotten Tomatoes":
+    template: { name: Collection,
+                sort_title: "Best Movies Ever",
+                level: "+++" }
+    name_mapping: "The 100 Club Collection"
+    mdblist_list: https://mdblist.com/lists/hdlists/100-on-rottentomatoes-com
+    smart_label: random
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "The Criterion Collection":
+    template: { name: Collection,
+                sort_title: "The Criterion Collection",
+                level: "++" }
+    # summary provided by Trakt
+    trakt_list_details:
+      - https://trakt.tv/users/maxwelldeux/lists/the-criterion-collection
+    smart_label: critic_rating.desc
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  Certified Fresh on Rotten Tomatoes:
+    template: { name: Collection,
+                sort_title: "Certified Fresh on Rotten Tomatoes",
+                level: "++" }
+    mdblist_list:
+      url: https://mdblist.com/lists/k0meta/certifiedfreshmovies
+    collection_order: custom
+    schedule: monthly(05)
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  # --------- top lists, massive ---------
+
+  Highly Rated Films on IMDb:
+    template: { name: Collection,
+                sort_title: "Highly Rated Films on IMDb",
+                level: "++++" }
+    imdb_chart: top_movies
+    smart_label: random
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  Top 250 Films on IMDb:
+    template: { name: Collection,
+                sort_title: "Top 250 Films on IMDb",
+                level: "++++" }
+    imdb_chart: top_movies
+    collection_order: custom
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  Top 250 Movies on Letterboxd:
+    template: { name: Collection,
+                sort_title: "Top 250 Movies on Letterboxd",
+                level: "++" }
+    letterboxd_list:
+      url: https://letterboxd.com/dave/list/official-top-250-narrative-feature-films
+    collection_order: custom
+    schedule: monthly(06)
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    radarr_add_missing: true
+
+  Top 2000 Movies on Letterboxd:
+    template: { name: Collection,
+                sort_title: "Top 2000 Movies on Letterboxd",
+                level: "+" }
+    letterboxd_list:
+      url: https://letterboxd.com/koenie/list/letterboxds-top-2000-narrative-feature-films
+    collection_order: custom
+    schedule: monthly(07)
+    visible_library: false
+    visible_home: false
+    visible_shared: false
+    radarr_add_missing: true
+
+  Top 2000 Movies on Sonemic:
+    template: { name: Collection,
+                sort_title: "Top 2000 Movies on Sonemic",
+                level: "+" }
+    letterboxd_list:
+      url: https://letterboxd.com/neo/list/bolded-on-rateyourmusic-as-of-august-10-2024/
+    collection_order: custom
+    schedule: monthly(08)
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    radarr_add_missing: true
+
+  Top 1000 Most Popular Movies on Sonemic:
+    template: { name: Collection,
+                sort_title: "Top 1000 Most Popular Movies on Sonemic",
+                level: "+" }
+    letterboxd_list:
+      url: https://letterboxd.com/sercep/list/ryms-rateyourmusic-1000-most-popular-films/
+    collection_order: custom
+    schedule: monthly(09)
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    radarr_add_missing: true
+
+  1000 Greatest Films of All Time:
+    template: { name: Collection,
+                sort_title: "1000 Greatest Films of All Time",
+                level: "+" }
+    letterboxd_list:
+      url: https://letterboxd.com/top10ner/list/top10ners-1000-greatest-films-of-all-time
+    collection_order: custom
+    schedule: monthly(10)
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    radarr_add_missing: true
+
+  Official Top 250 Films With the Most Fans:
+    template: { name: Collection,
+                sort_title: "Official Top 250 Films With the Most Fans",
+                level: "+++" }
+    letterboxd_list:
+      url: https://letterboxd.com/jack/list/official-top-250-films-with-the-most-fans/
+    collection_order: custom
+    schedule: monthly(12)
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  # Most Fans on Letterboxd:
+  #   template: { name: Collection,
+  #               sort_title: "Most Fans on Letterboxd",
+  #               level: "+" }
+  #   letterboxd_list:
+  #     url: https://letterboxd.com/crew/list/most-fans-on-letterboxd/
+  #   collection_order: custom
+  #   schedule: monthly(13)
+  #   visible_library: true
+  #   visible_home: true
+  #   visible_shared: true
+
+  The 2010s - Top 250 Narrative Features:
+    template: { name: Collection,
+                sort_title: "The 2010s - Top 250 Narrative Features",
+                level: "+" }
+    letterboxd_list:
+      url: https://letterboxd.com/crew/list/the-2010s-top-250-narrative-features/
+    collection_order: custom
+    schedule: yearly(01/01)
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  # --------- big lists of good stuff ---------
+
+  "1001 Movies You Must See Before You Die":
+    template: { name: Collection,
+                sort_title: "1001 Movies You Must See Before You Die",
+                level: "++" }
+    name_mapping: "1001 Movies You Must See Before You Die Collection"
+    # summary provided by Trakt
+    trakt_list_details:
+      - https://trakt.tv/users/sp1ti/lists/1001-movies-you-must-see-before-you-die
+    smart_label: random
+    schedule: monthly(03)
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    radarr_add_missing: true
+
+  "100 Movies Bucket List":
+    template: { name: Collection,
+                sort_title: "100 Movies Bucket List",
+                level: "++",
+                poster_url: https://m.media-amazon.com/images/I/81KZufVPTgL._AC_SL1500_.jpg }
+    # summary provided by Trakt
+    trakt_list_details:
+      - https://trakt.tv/users/dildogarden/lists/100-movies-bucket-list
+    collection_order: custom
+    schedule: monthly(04)
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  # --------- genres/moods/etc ---------
+
+  Anxiety-Inducing Cinema:
+    template: { name: Collection,
+                sort_title: "Anxiety-Inducing Cinema",
+                level: "++" }
+    letterboxd_list:
+      url: https://letterboxd.com/juliendonkeyboi/list/anxiety-inducing-cinema/
+    smart_label: random
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  For When You Want to Feel Something:
+    template: { name: Collection,
+                sort_title: "For When You Want to Feel Something",
+                level: "+++" }
+    letterboxd_list:
+      url: https://letterboxd.com/ellefnning/list/for-when-you-want-to-feel-something/
+    smart_label: random
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    # radarr_add_missing: true
+
+  You're Not the Same Person Once the Film Has Finished:
+    template: { name: Collection,
+                sort_title: "You're Not the Same Person Once the Film Has Finished",
+                level: "+++" }
+    letterboxd_list:
+      url: https://letterboxd.com/andredenervaux/list/youre-not-the-same-person-once-the-film-has/
+    smart_label: random
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  Movies Everyone Should Watch at Least Once:
+    template: { name: Collection,
+                sort_title: "Movies Everyone Should Watch at Least Once",
+                level: "+++" }
+    letterboxd_list:
+      url: https://letterboxd.com/fcbarcelona/list/movies-everyone-should-watch-at-least-once/
+    smart_label: random
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  Good Films 90 Minutes or Less:
+    template: { name: Collection,
+                sort_title: "Good Films 90 Minutes or Less",
+                level: "+++" }
+    letterboxd_list:
+      url: https://letterboxd.com/stautis/list/good-films-90-minutes-or-less/
+    smart_label: random
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  Random Movie Roulette:
+    template: { name: Collection,
+                sort_title: "Random Movie Roulette",
+                level: "+" }
+    letterboxd_list:
+      url: https://letterboxd.com/tobiasandersen2/list/random-movie-roulette/
+    smart_label: random
+    schedule: monthly(11)
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  Movies That Will Make You Say WTF:
+    template: { name: Collection,
+                sort_title: "Movies That Will Make You Say WTF",
+                level: "++" }
+    letterboxd_list:
+      url: https://letterboxd.com/zanderific/list/movies-that-will-make-you-say-what-the-fuck/
+    smart_label: random
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true

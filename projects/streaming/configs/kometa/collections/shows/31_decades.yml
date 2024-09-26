@@ -1,0 +1,47 @@
+external_templates:
+  - file: /config/templates/collections
+  - file: /config/templates/dynamic_collections
+
+dynamic_collections:
+  ## Use DC as suffix to avoid name conflicts with static collections
+  ## These get generated in the order they are listed here, so put the more intensive ones at the bottom
+
+  Best of Decade Shows DC: # mapping name does not matter just needs to be unique
+    type: custom
+    data:
+      thirties: 1930
+      forties: 1940
+      fifties: 1950
+      sixties: 1960
+      seventies: 1970
+      eighties: 1980
+      nineties: 1990
+      two_thousands: 2000
+      twenty_tens: 2010
+      twenty_twenties: 2020
+    template_variables:
+      starting:
+        thirties: 1930
+        forties: 1940
+        fifties: 1950
+        sixties: 1960
+        seventies: 1970
+        eighties: 1980
+        nineties: 1990
+        two_thousands: 2000
+        twenty_tens: 2010
+        twenty_twenties: 2020
+      ending:
+        thirties: 1939
+        forties: 1949
+        fifties: 1959
+        sixties: 1969
+        seventies: 1979
+        eighties: 1989
+        nineties: 1999
+        two_thousands: 2009
+        twenty_tens: 2019
+        twenty_twenties: 2029
+    title_format: Best of the <<key_name>>s
+    template:
+      - per_decade

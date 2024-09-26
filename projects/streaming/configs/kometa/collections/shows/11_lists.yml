@@ -1,0 +1,81 @@
+external_templates:
+  - file: /config/templates/collections
+  - file: /config/templates/dynamic_collections
+
+collections:
+  # --------- top lists, massive ---------
+
+  Highly Rated Shows on IMDb:
+    template: { name: Collection,
+                sort_title: "Highly Rated Shows on IMDb",
+                level: "++++" }
+    imdb_chart: top_shows
+    smart_label: random
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    
+  Top 250 Shows on IMDb:
+    template: { name: Collection,
+                sort_title: "Top 250 Shows on IMDb",
+                level: "+" }
+    imdb_chart: top_shows
+    collection_order: custom
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+  
+  Highly Rated Shows (Post-2010):
+    template: { name: Collection,
+                sort_title: "Highly Rated Shows (Post-2010)",
+                level: "+" }
+    trakt_list:
+      - https://trakt.tv/users/themlethem/lists/highly-rated-shows-post-2010
+    smart_label: random
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+  
+  # --------- big lists of good stuff ---------
+
+  TV Series Worth Watching:
+    template: { name: Collection,
+                sort_title: "TV Series Worth Watching",
+                level: "++" }
+    trakt_list:
+      - https://trakt.tv/users/canconfirm/lists/shut-up-and-watch
+    smart_label: random
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    sonarr_add_missing: true
+    item_sonarr_tag: trakt-canconfirm-shut-up-and-watch
+  
+  Hidden Gems:
+    template: { name: Collection,
+                sort_title: "Hidden Gems",
+                level: "++" }
+    trakt_list:
+      - https://trakt.tv/users/recom273/lists/hidden-gems
+    smart_label: random
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+  
+  Worth a Watch:
+    template: { name: Collection,
+                sort_title: "Worth a Watch",
+                level: "+" }
+    trakt_list:
+      - https://trakt.tv/users/420tushar/lists/worth-a-watch
+    smart_label: random
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+

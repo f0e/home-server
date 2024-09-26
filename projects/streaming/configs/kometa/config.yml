@@ -1,0 +1,185 @@
+libraries:
+  Movies:
+    schedule_overlays: weekly(monday|wednesday|friday|sunday)
+    report_path: config/missing/movies_report.yml
+
+    template_variables:
+      use_separator: false # don't add separator collections
+
+      visible_library: true
+      visible_home: true
+      visible_shared: true
+
+    collection_files:
+    - folder: config/collections/movies
+
+    overlay_files:
+    - default: mediastinger
+      template_variables:
+        vertical_align: top
+        vertical_offset: 0
+        horizontal_align: right
+        horizontal_offset: 0
+
+    operations:
+      delete_collections: # Delete collections from kometa not created on the latest run
+        configured: false
+      # metadata_backup:
+      #   path: config/metadata/movies_backup.yml
+      #   sync_tags: true
+      #   add_blank_entries: false
+
+    settings:
+      asset_directory:
+      - config/assets/movies
+      - config/assets/collections
+  # ------------------------------------------------
+  TV Shows:
+    # schedule_overlays: weekly(monday|wednesday|friday|sunday)
+    report_path: config/missing/tv_report.yml
+
+    template_variables:
+      use_separator: false # don't add separator collections
+
+      visible_library: true
+      visible_home: true
+      visible_shared: true
+
+    collection_files:
+    - folder: config/collections/shows
+
+    settings:
+      asset_directory:
+      - config/assets/tv
+      - config/assets/collections
+
+    overlay_files:
+    - default: status
+      template_variables:
+        horizontal_align: center
+        vertical_align: top
+        vertical_offset: 0
+        horizontal_offset: 0
+        back_height: 85
+        back_width: 1100
+        font_size: 60
+        text_canceled: CANCELLED
+        back_color_airing: '#016920'
+        back_color_returning: '#81007F'
+        back_color_canceled: '#B52222'
+        back_color_ended: '#000847'
+    
+    operations:
+      delete_collections: # Delete collections from kometa not created on the latest run
+        configured: false
+
+plex: # Can be individually specified per library as well; REQUIRED for the script to run
+  url: 
+  token: 
+  timeout: 60
+  db_cache:
+  clean_bundles: false
+  empty_trash: false
+  optimize: false
+  verify_ssl:
+tmdb: # REQUIRED for the script to run
+  apikey: 
+  language: en
+  cache_expiration: 60
+  region:
+omdb:
+  apikey: 
+  cache_expiration: 60
+mdblist:
+  apikey: 
+  cache_expiration: 60
+sonarr:
+  url: 
+  token: 
+  root_folder_path: /server/data/streaming/media/tv
+  quality_profile: Best (Prioritise Bluray)
+  add_missing: false
+  add_existing: false
+  upgrade_existing: false
+  monitor_existing: false
+  monitor: true
+  ignore_cache: false
+  language_profile:
+  series_type: standard
+  season_folder: true
+  tag: kometa
+  search: false
+  cutoff_search: false
+  sonarr_path:
+  plex_path:
+radarr:
+  url: 
+  token: 
+  root_folder_path: /server/data/streaming/media/movies
+  availability: released
+  quality_profile: Best (Prioritise Bluray)
+  add_missing: false
+  add_existing: false
+  upgrade_existing: false
+  ignore_cache: false
+  monitor: true
+  tag: kometa
+  search: false
+  radarr_path:
+  plex_path:
+  monitor_existing: false
+trakt:
+  client_id: 
+  client_secret: 
+  pin:
+  authorization:
+settings:
+  # run_order:
+  #   - operations
+  #   - metadata
+  #   - collections
+  #   - overlays
+  asset_depth: 0
+  asset_directory: /config/assets
+  asset_folders: true
+  cache_expiration: 60
+  cache: true
+  check_nightly: false
+  create_asset_folders: false
+  custom_repo:
+  default_collection_order:
+  delete_below_minimum: true
+  delete_not_scheduled: false
+  dimensional_asset_rename: false
+  download_url_assets: false
+  ignore_ids:
+  ignore_imdb_ids:
+  item_refresh_delay: 0
+  minimum_items: 1
+  missing_only_released: false
+  only_filter_missing: false
+  playlist_exclude_users:
+  playlist_report: true
+  playlist_sync_to_users: all
+  prioritize_assets: false
+  run_again_delay: 2
+  save_report: true
+  show_asset_not_needed: true
+  show_filtered: false
+  show_missing_assets: false
+  show_missing_episode_assets: false
+  show_missing_season_assets: false
+  show_missing: true
+  show_options: false
+  show_unconfigured: true
+  show_unmanaged: true
+  sync_mode: sync
+  tvdb_language: eng
+  verify_ssl: true
+  run_order:
+  - operations
+  - metadata
+  - collections
+  - overlays
+  overlay_artwork_filetype: jpg
+  overlay_artwork_quality:

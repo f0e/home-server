@@ -1,0 +1,257 @@
+external_templates:
+  - file: /config/templates/collections
+  - file: /config/templates/dynamic_collections
+
+collections:
+  "Stand-Up":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Stand-Up Comedy Collection"
+    trakt_list:
+      - https://trakt.tv/users/lish408/lists/stand-up-comedy-specials
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Spoofs and Parodies":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Spoof and Parody Films Collection"
+    trakt_list:
+      - https://trakt.tv/users/majeed_pk/lists/spoof-parody-films
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Romantic Comedies":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Romantic Comedies Collection"
+    trakt_list:
+      - https://trakt.tv/users/lish408/lists/rotten-tomatoes-the-200-best-romantic-comedies-of-all-time
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Sports":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Sports Movies Collection"
+    mdblist_list: https://mdblist.com/lists/hdlists/150-best-sports-movies-of-all-time
+    smart_label: random
+    visible_library: true
+    visible_home: false  # Not advertised on the home page
+    visible_shared: false  # Not advertised on the home page
+
+  "Heist":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Heist Movies Collection"
+    mdblist_list: https://mdblist.com/lists/hdlists/best-heist-movies-of-all-time
+    smart_label: random
+    visible_library: true
+    visible_home: false  # Not advertised on the home page
+    visible_shared: false  # Not advertised on the home page
+
+  "Thriller":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Thriller Movies Collection"
+    imdb_search:
+      type: movie, short, tv_movie, tv_special
+      # keyword.any: "Psychological%20Thriller"
+      genre.any: thriller
+      rating.gte: 5.0
+    smart_label: random
+    visible_library: true
+    visible_home: false  # Not advertised on the home page
+    visible_shared: false  # Not advertised on the home page
+
+  "Based On A True Story":
+    template: { name: Genre,
+                level: "++" }
+    trakt_list:
+      - https://trakt.tv/users/k0meta/lists/movies-based-on-true-stories
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Based On A Book":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Based On A Book Collection"
+    trakt_list:
+      - https://trakt.tv/users/k0meta/lists/movies-based-on-books
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Based On A Video Game":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Video Game Movies Collection"
+    trakt_list:
+      - https://trakt.tv/users/k0meta/lists/movies-based-on-video-games
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Monsters vs. Aliens":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Monsters Vs Aliens Collection"
+    trakt_list:
+      - https://trakt.tv/users/rizreflects/lists/aliens-monsters
+      - https://trakt.tv/users/y0dase/lists/monsters-creatures
+      - https://trakt.tv/users/ctt2canuckt/lists/kaiju-monsters
+      - https://trakt.tv/users/twentywashere/lists/welcome-to-earth-alien-invasions
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "True Crime":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "True Crime Collection"
+    trakt_list:
+      - https://trakt.tv/users/lish408/lists/true-crime-documentary-series-film
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Bon Appetit":
+    template: { name: Genre,
+                level: "++" }
+    trakt_list:
+      - https://trakt.tv/users/majeed_pk/lists/bon-appetit
+    smart_label: random
+    visible_library: true
+    visible_home: false  # Not advertised on the home page
+    visible_shared: false  # Not advertised on the home page
+
+  "Documentaries":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Documentaries Collection"
+    trakt_list:
+      - https://trakt.tv/users/majeed_pk/lists/documentaries
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Mafia & Gangsters":
+    template: { name: Genre,
+                level: "++" }
+    trakt_list:
+      - https://trakt.tv/users/majeed_pk/lists/the-complete-list-of-mafia-gangsters-movies
+    smart_label: random
+    visible_library: true
+    visible_home: false  # Not advertised on the home page
+    visible_shared: false  # Not advertised on the home page
+
+  "Existential":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Existentialist Films Collection"
+    trakt_list:
+      - https://trakt.tv/users/majeed_pk/lists/existentialist-films
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Courtroom":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Courtroom Drama Collection"
+    trakt_list:
+      - https://trakt.tv/users/majeed_pk/lists/courtroom-dramas
+    smart_label: random
+    visible_library: true
+    visible_home: false  # Not advertised on the home page
+    visible_shared: false  # Not advertised on the home page
+
+  "World War II, In Order":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "World War II Collection"
+    trakt_list:
+      - https://trakt.tv/users/majeed_pk/lists/world-war-ii-in-chronological-order
+    collection_order: custom  # Maintain the order of the list
+    visible_library: true
+    visible_home: false  # Not advertised on the home page
+    visible_shared: false  # Not advertised on the home page
+
+  "Feel-Good":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Feel Good Movies Collection"
+    trakt_list:
+      - https://trakt.tv/users/majeed_pk/lists/feelgood-movies
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Chill":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Chill Movies Collection"
+    trakt_list:
+      - https://trakt.tv/users/hdlists/lists/sunday-afternoon-movies?sort=rank,asc
+    smart_label: random
+    schedule: weekly(saturday), weekly(sunday), weekly(monday)
+    visible_home: weekly(saturday), weekly(sunday)
+    visible_shared: weekly(saturday), weekly(sunday)
+    visible_library: weekly(saturday), weekly(sunday)
+
+  "Weird":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Weirdo Videostore Collection"
+    trakt_list:
+      - https://trakt.tv/users/majeed_pk/lists/the-weirdo-s-videostore
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Controversial Cinema":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Controversial Cinema Collection"
+    trakt_list:
+      - https://trakt.tv/users/majeed_pk/lists/dark-deeply-disturbing-controversial-shocking-bizarre-and-messed-up-films
+    smart_label: random
+    visible_library: false  # This is a hidden collection due to the nature of the content
+    visible_home: false  # Not advertised on the home page
+    visible_shared: false  # Not advertised on the home page
+
+
+dynamic_collections:
+  ## Use DC as suffix to avoid name conflicts with static collections
+  ## These get generated in the order they are listed here, so put the more intensive ones at the bottom
+
+  Per-Genre DC Movies: # mapping name does not matter just needs to be unique
+    type: genre
+    exclude:
+      - Action/Adventure
+      - Talk
+      - Talk Show
+      - Awards Show
+      - Podcast
+      - Misdaad
+    title_format: <<key_name>>
+    template:
+      - per_genre
+    key_name_override:
+      Film-Noir: Film Noir

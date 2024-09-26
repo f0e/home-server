@@ -1,0 +1,31 @@
+external_templates:
+  - file: /config/templates/collections
+  - file: /config/templates/dynamic_collections
+
+collections:
+  ### New Content
+  "Added This Week":
+    template: { name: New,
+                level: "++" }
+    url_poster: https://i.imgur.com/jUMSikZ.png
+    smart_filter:
+      type: movies
+      sort_by: release.desc
+      all:
+        # Movie added in the last 7 days
+        added: 7
+        content_rating.not: NC-17, NR, X, MA-17, Not Rated
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "At The Box Office":
+    template: { name: New,
+                level: "+++" }
+    url_poster: https://i.imgur.com/LRH1tFr.png
+    trakt_list:
+      - https://trakt.tv/users/nwithan8/lists/in-cinemas-united-states
+    smart_label: release.desc
+    visible_library: true
+    visible_home: true
+    visible_shared: true

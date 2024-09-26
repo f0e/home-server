@@ -1,0 +1,15 @@
+external_templates:
+  - file: /config/templates/collections
+  - file: /config/templates/dynamic_collections
+
+collections:
+  "Best Australian Films":
+    template: { name: Country,
+                level: "+++" }
+    name_mapping: "Australian Films Collection"
+    letterboxd_list:
+      - https://letterboxd.com/aknighterrant/list/australian-films-worth-your-time
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true

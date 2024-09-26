@@ -1,0 +1,86 @@
+external_templates:
+  - file: /config/templates/collections
+  - file: /config/templates/dynamic_collections
+
+collections:
+  ### Genres
+  "True Crime":
+    template: { name: Genre }
+    name_mapping: "True Crime Collection"
+    trakt_list:
+      - https://trakt.tv/users/lish408/lists/true-crime-documentary-series-film
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Based On A True Story":
+    template: { name: Genre,
+                level: "++" }
+    trakt_list:
+      - https://trakt.tv/users/k0meta/lists/shows-based-on-true-stories
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Based On A Book":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Based On A Book Collection"
+    trakt_list:
+      - https://trakt.tv/users/k0meta/lists/shows-based-on-books
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Based On A Video Game":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Video Game Shows Collection"
+    trakt_list:
+      - https://trakt.tv/users/k0meta/lists/shows-based-on-video-games
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Metacritic Must-See Shows":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Metacritic Must-See Shows"
+    trakt_list:
+      - https://trakt.tv/users/k0meta/lists/metacritic-must-see-shows
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+  "Certified Fresh on Rotten Tomatoes":
+    template: { name: Genre,
+                level: "++" }
+    name_mapping: "Certified Fresh on Rotten Tomatoes"
+    trakt_list:
+      - https://trakt.tv/users/k0meta/lists/certified-fresh-shows
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+
+dynamic_collections:
+  ## Use DC as suffix to avoid name conflicts with static collections
+  ## These get generated in the order they are listed here, so put the more intensive ones at the bottom
+
+  Per-Genre DC Shows: # mapping name does not matter just needs to be unique
+    type: genre
+    exclude:
+      - Talk
+      - Action/Adventure
+      - Awards Show
+      - Podcast
+    title_format: <<key_name>>
+    template:
+      - per_genre
+    key_name_override:
+      Film-Noir: Film Noir

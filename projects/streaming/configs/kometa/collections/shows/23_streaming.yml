@@ -1,0 +1,13 @@
+external_templates:
+  - file: /config/templates/collections
+  - file: /config/templates/dynamic_collections
+
+collections:
+  Streaming on Stan:
+    template: { name: StreamingService }
+    trakt_list:
+      - https://trakt.tv/users/lish408/lists/true-crime-documentary-series-film
+    smart_label: random
+    visible_library: true
+    visible_home: true
+    visible_shared: true

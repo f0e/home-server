@@ -1,0 +1,10 @@
+__old
+__unused
+
+assets
+logs
+missing
+overlays
+
+*.cache
+UUID

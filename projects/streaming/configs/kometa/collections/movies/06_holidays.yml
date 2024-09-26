@@ -1,0 +1,195 @@
+external_templates:
+  - file: /config/templates/collections
+  - file: /config/templates/dynamic_collections
+
+templates:
+  Christmas_Advent_Calendar:
+    allowed_library_types: movie
+    summary: Day <<key>> of the Christmas Advent Calendar
+    sort_title: 061_Christmas_Advent_Calendar_<<key>> # 061_ is after 060_ for Holiday templates, before 065_ for Collection templates
+    trakt_list:
+      - https://trakt.tv/users/pierredurrr/lists/advent-calendar
+    limit: <<key>>
+    collection_order: custom
+    schedule: range(12/01-12/26)
+    visible_home: yearly(12/<<key>>)
+    visible_shared: yearly(12/<<key>>)
+    visible_library: yearly(12/<<key>>)
+    url_poster: https://as2.ftcdn.net/v2/jpg/03/05/39/41/1000_F_305394138_GiLwZEU9Fq7BG81bThTvkuzrJggyPc3W.jpg
+    cache_builders: 1 # No need to reparse the list every time
+
+collections:
+  # Recommended levels (will appear in the order below):
+  # ++++ - Major holidays, especially those with a specific date or small range (top priority)
+  # +++ - Major holidays, especially those with a specific date or small range (lower priority)
+  # ++ - Month-long or extended holidays
+  # + - Lesser holidays
+
+  "New Year's Eve":
+    schedule: range(12/26-01/05)
+    visible_home: range(12/26-01/04)
+    visible_shared: range(12/26-01/04)
+    visible_library: range(12/26-01/04)
+    template: { name: Holiday,
+                level: "+++",
+                poster_url: https://raw.githubusercontent.com/Kometa-Team/Default-Images/master/seasonal/years.jpg }
+    smart_label: random
+    imdb_list:
+      - https://www.imdb.com/list/ls066838460/
+    letterboxd_list:
+      - https://letterboxd.com/ediblehedgehog/list/theme-new-years-eve/by/rating/
+
+  "Valentine's Day":
+    schedule: range(02/01-02/21)
+    visible_home: range(02/01-02/20)
+    visible_shared: range(02/01-02/20)
+    visible_library: range(02/01-02/20)
+    template: { name: Holiday,
+                level: "+++",
+                poster_url: https://raw.githubusercontent.com/Kometa-Team/Default-Images/master/seasonal/valentine.jpg }
+    smart_label: random
+    imdb_list:
+      - https://www.imdb.com/list/ls000094398/
+      - https://www.imdb.com/list/ls057783436/
+      - https://www.imdb.com/list/ls064427905/
+    letterboxd_list:
+      - https://letterboxd.com/ediblehedgehog/list/theme-valentines/by/rating/
+    plex_search:
+      - all:
+          critic_rating.gte: 8.0
+          genre: Romance, Comedy
+      - all:
+          critic_rating.gte: 8.0
+          genre: Romance, Drama
+          genre.not: Documentary
+
+  "Easter":
+    schedule: range(03/20-05/01)
+    visible_home: range(03/20-04/30)
+    visible_shared: range(03/20-04/30)
+    visible_library: range(03/20-04/30)
+    template: { name: Holiday,
+                level: "++",
+                poster_url: https://raw.githubusercontent.com/Kometa-Team/Default-Images/master/seasonal/easter.jpg }
+    smart_label: random
+    imdb_list:
+      - https://www.imdb.com/list/ls062665509/
+      - https://www.imdb.com/list/ls051733651/
+    letterboxd_list:
+      - https://letterboxd.com/ediblehedgehog/list/theme-easter/by/rating/
+
+  "Halloween":
+    schedule: range(10/01-11/01)
+    visible_home: range(10/01-10/31)
+    visible_shared: range(10/01-10/31)
+    visible_library: range(10/01-10/31)
+    template: { name: Holiday,
+                level: "++++",
+                poster_url: https://raw.githubusercontent.com/Kometa-Team/Default-Images/master/seasonal/halloween.jpg }
+    smart_label: random
+    imdb_list:
+      - https://www.imdb.com/list/ls023118929/
+      - https://www.imdb.com/list/ls000099714/
+    trakt_list:
+      - https://trakt.tv/users/29zombies/lists/halloween
+      - https://trakt.tv/users/galacticboy/lists/not-so-spooky-halloween
+      # - https://trakt.tv/users/kairbear08/lists/halloween
+      # - https://trakt.tv/users/mybicycle/lists/halloween
+      # - https://trakt.tv/users/jayinftl/lists/halloween
+      # - https://trakt.tv/users/roswellgeek/lists/halloween
+    tmdb_collection:
+      - 185103    # Hotel Transylvania
+      - 11716     # Addams Family
+      - 750822    # Addams Family Animated
+      - 313086    # Conjuring
+      - 91361     # Halloween Collection
+      - 8581      # A Nightmare on Elm Street Collection
+      - 1733      # The Mummy Collection
+      - 8091      # Alien Collection
+      - 2980      # Ghostbusters
+      - 751156    # Hocus Pocus
+    tmdb_movie:
+      - 23437    # A Nightmare on Elm Street (2010)
+    letterboxd_list:
+      - https://letterboxd.com/ediblehedgehog/list/theme-halloween/by/rating/
+
+  "Horror":
+    schedule: range(10/01-11/01)
+    visible_home: range(10/01-10/31)
+    visible_shared: range(10/01-10/31)
+    visible_library: range(10/01-10/31)
+    template: { name: Holiday,
+                level: "+" }
+    smart_label: random
+    trakt_list:
+      - https://trakt.tv/users/lish408/lists/31-days-of-horror-2023  # TODO: Change annually
+    plex_search:
+      - all:
+          critic_rating.gte: 8.0
+          genre: Horror
+          genre.not: Documentary
+
+  "Trick or Treat":
+    schedule: range(10/01-11/01)
+    visible_home: range(10/01-10/31)
+    visible_shared: range(10/01-10/31)
+    visible_library: range(10/01-10/31)
+    template: { name: Holiday,
+                level: "+++" }
+    smart_label: random
+    trakt_list:
+      - https://trakt.tv/users/hdlists/lists/halloween-movies-for-kids
+
+  "Slasher":
+    schedule: range(10/01-11/01)
+    visible_home: range(10/01-10/31)
+    visible_shared: range(10/01-10/31)
+    visible_library: range(10/01-10/31)
+    template: { name: Holiday,
+                level: "+" }
+    smart_label: random
+    trakt_list:
+      - https://trakt.tv/users/hdlists/lists/80s-slasher-movies
+
+  "Christmas":
+    schedule: range(12/01-12/29)
+    visible_home: range(12/01-12/28)
+    visible_shared: range(12/01-12/28)
+    visible_library: range(12/01-12/28)
+    template: { name: Holiday,
+                level: "++",
+                poster_url: https://raw.githubusercontent.com/Kometa-Team/Default-Images/master/seasonal/christmas.jpg }
+    smart_label: random
+    imdb_list:
+      - https://www.imdb.com/list/ls000096828/
+      - https://www.imdb.com/list/ls000096828
+      - https://www.imdb.com/list/ls068976997
+      - https://www.imdb.com/list/ls027567380
+    trakt_list:
+      - https://trakt.tv/users/movistapp/lists/christmas-movies
+      - https://trakt.tv/users/questdvd/lists/absolute-hayes-christmas-classics
+      - https://trakt.tv/users/littlestella3/lists/christmas
+    letterboxd_list:
+      - https://letterboxd.com/ediblehedgehog/list/theme-christmas/by/rating
+
+  "Hallmark Christmas":
+    schedule: range(12/01-12/29)
+    visible_home: range(12/01-12/28)
+    visible_shared: range(12/01-12/28)
+    visible_library: range(12/01-12/28)
+    template: { name: Holiday,
+                level: "+" }
+    smart_label: random
+    trakt_list:
+      - https://trakt.tv/users/mzdiobolik/lists/hallmark-christmas-movies
+
+dynamic_collections:
+  Christmas Advent Calendar DC: # mapping name does not matter just needs to be unique
+    type: number
+    sync: true
+    data:
+      starting: 1
+      ending: 25
+    title_format: "Advent Calendar - Day <<key_name>>"
+    template:
+      - Christmas_Advent_Calendar
