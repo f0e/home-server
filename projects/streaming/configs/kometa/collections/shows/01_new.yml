@@ -9,7 +9,7 @@ collections:
                 level: "++++" }
     smart_filter:
       type: show
-      sort_by: release.desc
+      sort_by: added.desc
       all:
         # Shows added in the last 30 days
         added: 30
