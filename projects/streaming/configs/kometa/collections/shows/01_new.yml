@@ -4,24 +4,9 @@ external_templates:
 
 collections:
   ### New Content
-  "Added This Week":
-    template: { name: New,
-                level: "++++" }
-    url_poster: https://i.imgur.com/jUMSikZ.png
-    smart_filter:
-      type: episode
-      sort_by: release.desc
-      all:
-        # Episode added in the last 7 days
-        episode_added: 7
-    sync_mode: sync
-    visible_home: true
-    visible_shared: true
-    visible_library: true
-
   "Now On Plex":
     template: { name: New,
-                level: "+++" }
+                level: "++++" }
     smart_filter:
       type: show
       sort_by: release.desc
@@ -32,3 +17,17 @@ collections:
     visible_library: true
     visible_home: true
     visible_shared: true
+
+  "New Episodes":
+    template: { name: New,
+                level: "+++" }
+    smart_filter:
+      type: episode
+      sort_by: release.desc
+      all:
+        # Episode added in the last 7 days
+        release: 7
+    sync_mode: sync
+    visible_home: true
+    visible_shared: true
+    visible_library: true
