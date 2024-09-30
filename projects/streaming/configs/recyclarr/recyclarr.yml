@@ -150,7 +150,7 @@ sonarr:
           - name: SDTV
 
     # Custom Formats: https://recyclarr.dev/wiki/yaml/config-reference/custom-formats/
-    custom_formats:
+    custom_formats: # TODO: do i have to split some of this out and target specific quality profiles or is it all being in one place fine? check ui and see? same for radarr
       - trash_ids:
           # HDR Formats
           - 2b239ed870daba8126a53bd5dc8dc1c8 # DV HDR10Plus
@@ -165,11 +165,24 @@ sonarr:
           - 17e889ce13117940092308f48b48b45b # HLG
           - 2a7e3be05d3861d6df7171ec74cad727 # PQ
           
-          - 3a4127d8aa781b44120d907f2cd62627 # Hybrid
-
           # HDR boost
           - 0dad0a507451acddd754fe6dc3a7f5e7 # HDR10+ Boost
           - 385e9e8581d33133c3961bdcdeffb7b4 # DV HDR10+ Boost
+
+          # Bluray release groups
+          - 9965a052eb87b0d10313b1cea89eb451 # Remux Tier 01
+          - 8a1d0c3d7497e741736761a1da866a2e # Remux Tier 02
+          - d6819cba26b1a6508138d25fb5e32293 # HD Bluray Tier 01
+          - c2216b7b8aa545dc1ce8388c618f8d57 # HD Bluray Tier 02
+
+          # Bluray versions
+          - 3a4127d8aa781b44120d907f2cd62627 # Hybrid
+
+          # HQ Source Groups
+          - e6258996055b9fbab7e9cb2f75819294 # WEB Tier 01
+          - 58790d4e2fdcd9733aa7ae68ba2bb503 # WEB Tier 02
+          - d84935abd3f8556dcd51d4f27e22d0a6 # WEB Tier 03
+          - d0c516558625b04b363fa6c5c2c7cfd4 # WEB Scene
 
           # Unwanted
           - 85c61753df5da1fb2aab6f2a47426b09 # BR-DISK
@@ -219,12 +232,6 @@ sonarr:
           - 93c9d1e566dca8b34d57f5efbbf85f28 # VIU
           # - 43b3cf48cb385cd3eac608ee6bca7f09 # UHD Streaming Boost
           # - d2d299244a92b8a52d4921ce3897a256 # UHD Streaming Cut
-
-          # HQ Source Groups
-          - e6258996055b9fbab7e9cb2f75819294 # WEB Tier 01
-          - 58790d4e2fdcd9733aa7ae68ba2bb503 # WEB Tier 02
-          - d84935abd3f8556dcd51d4f27e22d0a6 # WEB Tier 03
-          - d0c516558625b04b363fa6c5c2c7cfd4 # WEB Scene
         assign_scores_to:
           - name: Best
           - name: WEB
