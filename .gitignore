@@ -2,3 +2,5 @@
 ignore
 
 windmill
+books
+projects/streaming/docker-compose-rclone-container.yml.old

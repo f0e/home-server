@@ -30,7 +30,7 @@
 
 {$CUSTOM_DOMAIN}, *.{$CUSTOM_DOMAIN} {
 	tls {
-		dns cloudflare {$CF_API_TOKEN}
+		dns cloudflare {$CF_API_TOKEN} # note: https://caddy.community/t/getting-certificate-from-letsencrypt-jws-verification-error/25389/15 got jws verification error stuff one time preventing cert renewal, fix was deleting caddy folder in caddy/data and letting it recreate all the certs and stuff. shouldn't happen again?
 		resolvers 1.1.1.1 # think this is required? whatever, it's working now so i'll just leave it
 		propagation_timeout 10m # important, doesn't update quick enough by default (for whatever reason..)
 	}

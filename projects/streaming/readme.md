@@ -52,3 +52,5 @@ https://trash-guides.info/Radarr/Radarr-recommended-naming-scheme
 https://github.com/westsurname/scripts#blackhole
 
 https://github.com/dreulavelle/Prowlarr-Indexers
+
+https://trash-guides.info/Radarr/Radarr-collection-of-custom-formats/ disable repack prefer

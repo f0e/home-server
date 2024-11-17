@@ -299,3 +299,15 @@ collections:
     visible_library: true
     visible_home: true
     visible_shared: true
+
+  As I Was Moving Ahead, Occasionally I Saw Brief Glimpses of Beauty:
+    template: { name: Collection,
+                sort_title: "As I Was Moving Ahead, Occasionally I Saw Brief Glimpses of Beauty",
+                level: "+" }
+    trakt_list:
+      - https://trakt.tv/users/sistersolaris/lists/as-i-was-moving-ahead-occasionally-i-saw-brief-glimpses-of-beauty?sort=title,asc
+    smart_label: random
+    # default schedule
+    visible_library: true
+    visible_home: true
+    visible_shared: true

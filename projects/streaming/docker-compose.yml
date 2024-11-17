@@ -336,6 +336,8 @@ services:
     # environment:
     #   - KOMETA_RUN=true
     #   - KOMETA_IGNORE_SCHEDULES=true
+    env_file:
+      - kometa.env
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${CONFIG_LOCATION}/kometa:/config
