@@ -1,0 +1,14 @@
+services:
+  beets:
+    image: lscr.io/linuxserver/beets:latest
+    container_name: beets
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${CONFIG_LOCATION}/beets:/config
+      - ${MUSIC_LOCATION}:/server/music
+    ports:
+      - :8337
+    restart: unless-stopped

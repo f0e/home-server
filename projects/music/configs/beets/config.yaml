@@ -1,0 +1,80 @@
+plugins:
+  - embedart
+  - fetchart
+  - lastgenre
+  - web
+  - extrafiles
+  - unimported
+
+directory: /server/music/beets
+art_filename: cover
+original_date: yes
+languages: en
+
+paths:
+  default: $albumartist/[$year]%if{$albumtype, [$albumtype]} $album%aunique{}/$track - $title
+  singleton: Non-Album/$artist - $title
+  comp: Compilations/[$year] $album%aunique{}/$track - $title
+  albumtype:soundtrack: Soundtracks/[$year] $album/$track - $title
+
+import:
+  move: yes
+  #   resume: ask
+  #   incremental: yes
+  log: beet.log
+  languages: en
+
+convert:
+  auto: no
+
+lastgenre:
+  auto: yes
+  source: album
+
+embedart:
+  auto: yes
+
+fetchart:
+  high_resolution: yes
+  lastfm_key:
+  sources:
+    - filesystem
+    - coverart
+    - itunes
+    - amazon
+    - albumart
+    - wikipedia
+    - lastfm
+
+lastfm:
+  user:
+
+extrafiles:
+  patterns:
+    artworkdir:
+      - "[aA]rtwork/"
+      - "[aA]rtworks/"
+      - "[aA]rt/"
+      - "[cC]overs"
+    scansdir:
+      - "[sS]cans/"
+    datafiles:
+      - "*.log"
+      - "*.txt"
+      - "*.md5"
+      - "*.ffp"
+      - "*.cue"
+      - "*.CUE"
+      - "*.nfo"
+      - "*.st5"
+      - "*.auCDtect"
+      - "*.accurip"
+      - "*.sfv"
+      - "*.xml"
+    otherfiles:
+      - "*.pdf"
+  paths:
+    artworkdir: $albumpath/artwork
+    scansdir: $albumpath/scans
+    datafiles: $albumpath/$filename
+    otherfiles: $albumpath/$filename
