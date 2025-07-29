@@ -12,10 +12,14 @@ original_date: yes
 languages: en
 
 paths:
-  default: $albumartist/[$year]%if{$albumtype, [$albumtype]} $album%aunique{}/$track - $title
-  singleton: Non-Album/$artist - $title
-  comp: Compilations/[$year] $album%aunique{}/$track - $title
-  albumtype:soundtrack: Soundtracks/[$year] $album/$track - $title
+  default: $albumartist/[%if{$original_year,$original_year,$year}]%if{$albumtype, [$albumtype]} $album%aunique{}/$track - $title
+  singleton: $artist/Non-Album/$title
+
+# paths:
+#   default: $albumartist/[$year] $album%aunique{}/$track - $title
+#   singleton: Non-Album/$artist - $title
+#   comp: Compilations/[$year] $album%aunique{}/$track - $title
+#   albumtype:soundtrack: Soundtracks/[$year] $album/$track - $title
 
 import:
   move: yes
@@ -23,6 +27,7 @@ import:
   #   incremental: yes
   log: beet.log
   languages: en
+  duplicate_action: skip
 
 convert:
   auto: no
