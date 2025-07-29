@@ -21,7 +21,7 @@ sonarr:
 
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
-    
+
     quality_profiles:
       - name: Best
         reset_unmatched_scores:
@@ -164,7 +164,7 @@ sonarr:
           - a3d82cbef5039f8d295478d28a887159 # HDR10+
           - 17e889ce13117940092308f48b48b45b # HLG
           - 2a7e3be05d3861d6df7171ec74cad727 # PQ
-          
+
           # HDR boost
           - 0dad0a507451acddd754fe6dc3a7f5e7 # HDR10+ Boost
           - 385e9e8581d33133c3961bdcdeffb7b4 # DV HDR10+ Boost
@@ -324,7 +324,7 @@ radarr:
           - name: HDTV-2160p
           - name: HDTV-1080p
           - name: HDTV-720p
-          
+
       - name: Bluray
         reset_unmatched_scores:
           enabled: true
@@ -340,7 +340,7 @@ radarr:
           - name: Remux-1080p
           - name: Bluray-1080p
           - name: Bluray-720p
-          
+
       - name: Best (Prioritise Bluray)
         reset_unmatched_scores:
           enabled: true
