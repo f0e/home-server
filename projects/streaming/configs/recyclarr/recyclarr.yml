@@ -190,6 +190,7 @@ sonarr:
           - e2315f990da2e2cbfc9fa5b7a6fcfe48 # LQ (Release Title)
           # - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
           # - fbcb31d8dabd2a319072b84fc0b7249c # Extras
+          - 23297a736ca77c0fc8e70f8edd7ee56c # Upscaled
 
           # # Optional (for UHD) - Deprioritise SDR
           # - 2016d1676f5ee13a5b7257ff86ac9a93 # SDR
