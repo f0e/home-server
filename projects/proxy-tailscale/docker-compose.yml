@@ -1,0 +1,20 @@
+services:
+  caddy-tailscale:
+    image: ghcr.io/f0e/caddy-custom
+    container_name: caddy-tailscale
+    networks:
+      - proxy-tailscale
+    ports:
+      - xxxxxxxxxxxxxx
+    env_file:
+      - caddy.env
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DATA_LOCATION}/caddy/data:/data
+      - ${CONFIG_LOCATION}/caddy/config:/config
+      - ${CADDYFILE_LOCATION}:/etc/caddy/Caddyfile
+    restart: unless-stopped
+
+networks:
+  proxy-tailscale:
+    external: true

@@ -1,0 +1,40 @@
+
+{
+	# admin 0.0.0.0:2019
+
+	### for testing
+	# acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+
+	email {$SSL_EMAIL}
+}
+
+## It is important to read the following document before enabling this section:
+## https://www.authelia.com/integration/proxies/caddy/#trusted-proxies
+(trusted_proxy_list) {
+	## Uncomment & adjust the following line to configure specific ranges which should be considered as trustworthy.
+	# trusted_proxies 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 fc00::/7
+}
+
+*.{$CUSTOM_DOMAIN} {
+	tls {
+		dns cloudflare {$CF_API_TOKEN} # note: https://caddy.community/t/getting-certificate-from-letsencrypt-jws-verification-error/25389/15 got jws verification error stuff one time preventing cert renewal, fix was deleting caddy folder in caddy/data and letting it recreate all the certs and stuff. shouldn't happen again?
+		resolvers 1.1.1.1 # think this is required? whatever, it's working now so i'll just leave it
+		propagation_timeout 10m # important, doesn't update quick enough by default (for whatever reason..)
+	}
+
+	log {
+		output file /data/access-internal.log
+	}
+	
+	encode zstd gzip
+	
+	@plex host plex.{$CUSTOM_DOMAIN}
+	handle @plex {
+		reverse_proxy streaming-plex:32400
+	}
+
+	# Fallback for otherwise unhandled domains
+	handle {
+		abort
+	}
+}

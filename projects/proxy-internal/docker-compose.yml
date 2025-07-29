@@ -1,5 +1,5 @@
 services:
-  caddy:
+  caddy-internal:
     image: ghcr.io/f0e/caddy-custom
     container_name: caddy-internal
     env_file:

@@ -77,8 +77,8 @@
 		reverse_proxy paperless-ngx:8000
 	}
 	
-	@owntracks host owntracks.{$CUSTOM_DOMAIN}
-	handle @owntracks {
+	@maps host maps.{$CUSTOM_DOMAIN}
+	handle @maps {
 		import authelia
 		reverse_proxy owntracks-frontend:80
 	}
@@ -86,7 +86,7 @@
 	# public (has their own auth) TODO: oauth?
 	@immich host immich.{$CUSTOM_DOMAIN}
 	handle @immich {
-		reverse_proxy immich-server:3001
+		reverse_proxy immich-server:2283
 	}
 
 	@requests host requests.{$CUSTOM_DOMAIN}
@@ -104,6 +104,12 @@
 	handle @n8n {
 		import authelia
 		reverse_proxy n8n:5678
+	}
+
+	@changedetect host changedetect.{$CUSTOM_DOMAIN}
+	handle @changedetect {
+		import authelia
+		reverse_proxy changedetection:5000
 	}
 
 	@scrobbler host scrobbler.{$CUSTOM_DOMAIN}
@@ -154,6 +160,12 @@
 		reverse_proxy dozzle:8080
 	}
 
+	@pgadmin host pgadmin.{$CUSTOM_DOMAIN}
+	handle @pgadmin {
+		import authelia
+		reverse_proxy pgadmin4:80
+	}
+
 	# arrs
 	@prowlarr host prowlarr.{$CUSTOM_DOMAIN}
 	handle @prowlarr {
@@ -178,6 +190,16 @@
 		import authelia
 		reverse_proxy streaming-bazarr:6767
 	}
+
+	@zurg host zurg.{$CUSTOM_DOMAIN}
+	handle @zurg {
+		import authelia
+
+		reverse_proxy streaming-zurg:9999 {
+			header_up Authorization "{$ZURG_AUTH}"
+		}
+	}
+
 
 	# @rclone host rclone.{$CUSTOM_DOMAIN}
 	# handle @rclone {
