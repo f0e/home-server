@@ -183,13 +183,13 @@ collections:
     trakt_list:
       - https://trakt.tv/users/mzdiobolik/lists/hallmark-christmas-movies
 
-dynamic_collections:
-  Christmas Advent Calendar DC: # mapping name does not matter just needs to be unique
-    type: number
-    sync: true
-    data:
-      starting: 1
-      ending: 25
-    title_format: "Advent Calendar - Day <<key_name>>"
-    template:
-      - Christmas_Advent_Calendar
+# dynamic_collections:
+#   Christmas Advent Calendar DC: # mapping name does not matter just needs to be unique
+#     type: number
+#     sync: true
+#     data:
+#       starting: 1
+#       ending: 25
+#     title_format: "Advent Calendar - Day <<key_name>>"
+#     template:
+#       - Christmas_Advent_Calendar
