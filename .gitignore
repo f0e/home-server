@@ -1,6 +1,16 @@
 *.env
+
 ignore
 
-windmill
-books
+projects/windmill
+compose-manager/windmill
+projects/matrix
+compose-manager/matrix
+projects/books
+compose-manager/books
+projects/owntracks
+compose-manager/owntracks
+projects/git
+compose-manager/git
+
 projects/streaming/docker-compose-rclone-container.yml.old
