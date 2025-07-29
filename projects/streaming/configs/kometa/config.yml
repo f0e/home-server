@@ -66,9 +66,8 @@ libraries:
         text_canceled: CANCELLED
         back_color_airing: '#016920'
         back_color_returning: '#81007F'
-        back_color_canceled: '#B52222'
+        back_color_canceled: '#3b3b3b'
         back_color_ended: '#000847'
-    
     operations:
       delete_collections: # Delete collections from kometa not created on the latest run
         configured: false
@@ -183,3 +182,4 @@ settings:
   - overlays
   overlay_artwork_filetype: jpg
   overlay_artwork_quality:
+  show_unfiltered: false
